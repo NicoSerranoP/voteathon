@@ -1,0 +1,39 @@
+{
+    "name": "@unirep-app/contracts",
+    "version": "1.0.0",
+    "description": "Smart contracts of the Unirep Application",
+    "keywords": [],
+    "author": "Unirep Team <team@unirep.io>",
+    "license": "ISC",
+    "main": "build/src/index.js",
+    "repository": "git+https://github.com/Unirep/create-unirep-app.git",
+    "scripts": {
+        "build": "yarn buildVerifier && hardhat compile && yarn abi",
+        "buildVerifier": "ts-node ./scripts/genVerifier.ts ",
+        "abi": "ts-node scripts/abi",
+        "hardhat": "hardhat",
+        "deploy": "hardhat run scripts/deploy.ts",
+        "test": "hardhat test --network hardhat"
+    },
+    "bugs": {
+        "url": "https://github.com/Unirep/create-unirep-app/issue"
+    },
+    "homepage": "https://github.com/Unirep/create-unirep-app#readme",
+    "devDependencies": {
+        "@semaphore-protocol/identity": "^3.6.0",
+        "@nomiclabs/hardhat-ethers": "^2.2.0",
+        "@openzeppelin/contracts": "^4.7.3",
+        "@typechain/ethers-v5": "^10.2.0",
+        "@typechain/hardhat": "^6.1.5",
+        "@types/node": "^18.15.11",
+        "@unirep-app/circuits": "1.0.0",
+        "@unirep/contracts": "2.0.0-beta-3",
+        "hardhat": "^2.12.0",
+        "ts-node": "^10.9.1",
+        "typechain": "^8.1.1",
+        "typescript": "^5.0.3"
+    },
+    "dependencies": {
+        "poseidon-solidity": "^0.0.3"
+    }
+}
