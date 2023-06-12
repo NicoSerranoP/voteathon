@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "dist",
     "module": "commonjs",
     "noImplicitAny": true,
     "preserveConstEnums": true,
