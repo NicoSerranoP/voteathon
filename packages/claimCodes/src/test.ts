@@ -1,5 +1,5 @@
-import {generateClaimCodes, markClaimCodeAsUsed} from './index'
-import { ClaimCodeT } from './index'
+import {generateClaimCodes, markClaimCodeAsUsed} from './claimCodes'
+import { ClaimCodeT } from './claimCodes'
 
 let claimCodes: ClaimCodeT[] = []
 claimCodes = generateClaimCodes(10)

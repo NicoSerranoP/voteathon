@@ -1,5 +1,6 @@
 # Claim Codes using a subset of Bip39 words
 
+## General Usage
 ```ts
 import {generateClaimCodes, markClaimCodeAsUsed} from 'ClaimCodes'
 import { ClaimCodeT } from 'ClaimCodes'
@@ -15,3 +16,5 @@ console.log(claimCodeStatus.status) // CLAIMED
 console.log(claimCodeStatus.message) // "Successfully claimed Code"
 console.log(claimCodeStatus.claimCodes) // Updated ClaimCodes array
 ```
+
+## Managing multiple sets of claim codes
