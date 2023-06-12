@@ -1,18 +1,16 @@
 import bip39ish from "./bip39ish";
 
-type ClaimCode = {
+export type ClaimCode = {
     code: String;
     used: Boolean;
 }
-
-let claimCodes: ClaimCode[] = []
 
 function generateRandomClaimCode() {
     return bip39ish[Math.floor(Math.random() * bip39ish.length)] + "-" + bip39ish[Math.floor(Math.random() * bip39ish.length)];
 }
 
 // Function to generate claim codes and save them to a JSON file
-export function generateClaimCodes(count: number) {
+export function generateClaimCodes(count: number, claimCodes: ClaimCode[] = []) {
     let codes: string[] = []
     for (let i = 0; i < count; i++) {
         let pass = false;
@@ -28,9 +26,10 @@ export function generateClaimCodes(count: number) {
             used: false
         });
     }
+    return claimCodes;
 }
 
-export function markClaimCodeAsUsed(code: string) {
+export function markClaimCodeAsUsed(code: string, claimCodes: ClaimCode[]) {
     for (let claimCode of claimCodes) {
         if (claimCode.code === code) {
             if (claimCode.used) {
