@@ -52,7 +52,7 @@ export function markClaimCodeAsUsed(code: string, claimCodes: ClaimCodeT[]): Cla
                 return { status, message, claimCodes }
             }
             claimCode.used = true;
-            status = ClaimCodeStatusEnum.VALID
+            status = ClaimCodeStatusEnum.CLAIMED
             return {status, message, claimCodes};
         }
     }
