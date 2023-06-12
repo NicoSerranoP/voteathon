@@ -6,7 +6,7 @@ export type ClaimCodeT = {
 }
 
 export enum ClaimCodeStatusEnum {
-    VALID = "VALID",
+    CLAIMED = "CLAIMED",
     NOT_FOUND = "NOT_FOUND",
     ALREADY_USED = "ALREADY_USED",
 }
