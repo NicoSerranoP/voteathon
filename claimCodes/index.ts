@@ -1,8 +1,20 @@
 import bip39ish from "./bip39ish";
 
-export type ClaimCode = {
-    code: String;
-    used: Boolean;
+export type ClaimCodeT = {
+    code: string;
+    used: boolean;
+}
+
+export enum ClaimCodeStatusEnum {
+    VALID = "VALID",
+    NOT_FOUND = "NOT_FOUND",
+    ALREADY_USED = "ALREADY_USED",
+}
+
+export interface ClaimCodeStatus {
+    status: ClaimCodeStatusEnum
+    message: string
+    claimCodes: ClaimCodeT[]
 }
 
 function generateRandomClaimCode() {
@@ -10,7 +22,7 @@ function generateRandomClaimCode() {
 }
 
 // Function to generate claim codes and save them to a JSON file
-export function generateClaimCodes(count: number, claimCodes: ClaimCode[] = []) {
+export function generateClaimCodes(count: number, claimCodes: ClaimCodeT[] = []): ClaimCodeT[] {
     let codes: string[] = []
     for (let i = 0; i < count; i++) {
         let pass = false;
@@ -29,17 +41,22 @@ export function generateClaimCodes(count: number, claimCodes: ClaimCode[] = []) 
     return claimCodes;
 }
 
-export function markClaimCodeAsUsed(code: string, claimCodes: ClaimCode[]) {
+export function markClaimCodeAsUsed(code: string, claimCodes: ClaimCodeT[]): ClaimCodeStatus {
+    let message = "Successfully claimed code";
+    let status = ClaimCodeStatusEnum.NOT_FOUND;
     for (let claimCode of claimCodes) {
         if (claimCode.code === code) {
             if (claimCode.used) {
-                console.warn(`Claim code ${code} has already been used`)
-                return false
+                message = `Claim code ${code} has already been used`
+                status = ClaimCodeStatusEnum.ALREADY_USED
+                return { status, message, claimCodes }
             }
             claimCode.used = true;
-            return true;
+            status = ClaimCodeStatusEnum.VALID
+            return {status, message, claimCodes};
         }
     }
-    console.warn(`Claim code ${code} does not exist`);
-    return false;
+    message = `Claim code ${code} does not exist`
+    status = ClaimCodeStatusEnum.NOT_FOUND
+    return { status, message, claimCodes }
 }
