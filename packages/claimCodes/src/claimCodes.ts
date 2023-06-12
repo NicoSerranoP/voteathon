@@ -15,6 +15,7 @@ export interface ClaimCodeStatus {
     status: ClaimCodeStatusEnum
     message: string
     claimCodes: ClaimCodeT[]
+    name?: string
 }
 
 function generateRandomClaimCode() {

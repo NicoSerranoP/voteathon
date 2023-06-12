@@ -1,10 +1,16 @@
-import { generateClaimCodes, markClaimCodeAsUsed, ClaimCodeT, ClaimCodeStatusEnum } from './claimCodes';
+import { generateClaimCodes, markClaimCodeAsUsed, ClaimCodeT, ClaimCodeStatus, ClaimCodeStatusEnum } from './claimCodes';
+
+type claimCodeSetsT = {[key: string]: ClaimCodeT[]}
 
 export class ClaimCodeManager {
-  claimCodeSets: {[key: string]: ClaimCodeT[]}; // fix type of claimCodeSets
+  claimCodeSets: claimCodeSetsT;
 
-  constructor() {
-    this.claimCodeSets = { "SINGLES": [] }; // initialize claimCodeSets with an empty array
+  constructor(claimCodeSetInput: claimCodeSetsT) {
+    if (claimCodeSetInput) {
+      this.claimCodeSets = claimCodeSetInput
+    } else {
+      this.claimCodeSets = { "SINGLES": [] } // initialize claimCodeSets with an empty array
+    }
   }
 
   generateClaimCodeSet(name: string, count: number) {
@@ -14,13 +20,15 @@ export class ClaimCodeManager {
     this.claimCodeSets[name] = generateClaimCodes(count)
   }
 
-  claimCode(code: string) {
+  claimCode(code: string): ClaimCodeStatus {
     for (let claimCodeSet in this.claimCodeSets) {
       let result = markClaimCodeAsUsed(code, this.claimCodeSets[claimCodeSet])
       if (result.status === ClaimCodeStatusEnum.CLAIMED) {
+        result.name = claimCodeSet
         return result
       }
       else if (result.status === ClaimCodeStatusEnum.ALREADY_USED) {
+        result.name = claimCodeSet
         return result
       }
       else {
@@ -28,6 +36,10 @@ export class ClaimCodeManager {
       }
     }
     return { status: ClaimCodeStatusEnum.NOT_FOUND, message: `Claim code ${code} does not exist`, claimCodes: [] }
+  }
+
+  getClaimCodeSets(): claimCodeSetsT {
+    return this.claimCodeSets
   }
 
 }
