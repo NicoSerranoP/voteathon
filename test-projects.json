@@ -1,0 +1,19 @@
+{
+    "projects": [
+        {
+            "name": "Test Project 1",
+            "description": "Hack the planet",
+            "challenge": "Will it blend?",
+            "deliverables": "Stuxnet executable",
+            "repoURL": "https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
+            "leads": [{
+                "name": "Steve Steverson"
+            }],
+            "hackers": [{
+                "name": "Cotton-eyed Joe"
+            }, {
+                "name": "Coolie McCool Face"
+            }]
+        }
+    ]
+}
