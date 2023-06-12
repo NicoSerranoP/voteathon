@@ -1,8 +1,8 @@
 # Claim Codes using a subset of Bip39 words
 
 ```ts
-import {generateClaimCodes, markClaimCodeAsUsed} from './index'
-import { ClaimCodeT } from './index'
+import {generateClaimCodes, markClaimCodeAsUsed} from 'ClaimCodes'
+import { ClaimCodeT } from 'ClaimCodes'
 
 // generateClaimCodes returns an array of ClaimCodeT objects
 const claimCodes = generateClaimCodes(10) // [ { code: 'barely-drastic', used: false }, ...}]
