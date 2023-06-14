@@ -7,10 +7,10 @@ import { APP_ADDRESS } from '../config'
 import TransactionManager from '../singletons/TransactionManager'
 import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/Voteathon.sol/Voteathon.json'
 
-export default (app: Express, db: DB, synchronizer: Synchronizer) => {
-    app.post('/api/request', async (req, res) => {
+export default (app: Express, _db: DB, synchronizer: Synchronizer) => {
+    app.post('/api/vote', async (req, res) => {
         try {
-            const { reqData, publicSignals, proof } = req.body
+            const { projectId, emoji, publicSignals, proof } = req.body
 
             const epochKeyProof = new EpochKeyProof(
                 publicSignals,
@@ -22,27 +22,12 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
                 res.status(400).json({ error: 'Invalid proof' })
                 return
             }
-            const epoch = await synchronizer.loadCurrentEpoch()
             const appContract = new ethers.Contract(APP_ADDRESS, UNIREP_APP.abi)
 
-            const keys = Object.keys(reqData)
-            let calldata: any
-            if (keys.length === 1) {
-                calldata = appContract.interface.encodeFunctionData(
-                    'submitAttestation',
-                    [epochKeyProof.epochKey, epoch, keys[0], reqData[keys[0]]]
-                )
-            } else if (keys.length > 1) {
-                calldata = appContract.interface.encodeFunctionData(
-                    'submitManyAttestations',
-                    [
-                        epochKeyProof.epochKey,
-                        epoch,
-                        keys,
-                        keys.map((k) => reqData[k]),
-                    ]
-                )
-            }
+            const calldata = appContract.interface.encodeFunctionData(
+                'vote',
+                [projectId, emoji, publicSignals, proof]
+            )
 
             const hash = await TransactionManager.queueTransaction(
                 APP_ADDRESS,

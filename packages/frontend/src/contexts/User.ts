@@ -99,21 +99,13 @@ class User {
         this.latestTransitionedEpoch = this.userState.sync.calcCurrentEpoch()
     }
 
-    async requestData(
-        reqData: { [key: number]: string | number },
+    async vote(
+        projectId: number,
+        emoji: number,
         epkNonce: number
     ) {
         if (!this.userState) throw new Error('user state not initialized')
 
-        for (const key of Object.keys(reqData)) {
-            if (reqData[+key] === '') {
-                delete reqData[+key]
-                continue
-            }
-        }
-        if (Object.keys(reqData).length === 0) {
-            throw new Error('No data in the attestation')
-        }
         const epochKeyProof = await this.userState.genEpochKeyProof({
             nonce: epkNonce,
         })
@@ -124,7 +116,8 @@ class User {
             },
             body: JSON.stringify(
                 stringifyBigInts({
-                    reqData,
+                    projectId,
+                    emoji,
                     publicSignals: epochKeyProof.publicSignals,
                     proof: epochKeyProof.proof,
                 })

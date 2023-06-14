@@ -3,8 +3,14 @@ import { observer } from 'mobx-react-lite'
 import './dashboard.css'
 import Button from '../components/Button'
 import Tooltip from '../components/Tooltip'
-
 import User from '../contexts/User'
+
+enum Emoji {
+    THUMBS_UP,
+    THUMBS_DOWN,
+    HEART,
+    HEART_BROKEN
+}
 
 type ReqInfo = {
     nonce: number
@@ -19,9 +25,8 @@ type ProofInfo = {
 export default observer(() => {
     const userContext = React.useContext(User)
     const [remainingTime, setRemainingTime] = React.useState<number | string>(0)
-    const [reqData, setReqData] = React.useState<{
-        [key: number]: number | string
-    }>({})
+    const [projectId, setProjectId] = React.useState<number>(0)
+    const [emoji, setEmoji] = React.useState<Emoji>(0)
     const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
     const [proveData, setProveData] = React.useState<{
         [key: number]: number | string
@@ -170,7 +175,7 @@ export default observer(() => {
                                                 Data {i} ({fieldType(i)})
                                             </p>
                                             <input
-                                                value={reqData[i] ?? ''}
+                                                value={''}
                                                 onChange={(event) => {
                                                     if (
                                                         !/^\d*$/.test(
@@ -178,10 +183,8 @@ export default observer(() => {
                                                         )
                                                     )
                                                         return
-                                                    setReqData(() => ({
-                                                        ...reqData,
-                                                        [i]: event.target.value,
-                                                    }))
+
+                                                        throw new Error("TODO Does vote need to happen here?");
                                                 }}
                                             />
                                         </div>
@@ -230,11 +233,13 @@ export default observer(() => {
                                 ) {
                                     throw new Error('Needs transition')
                                 }
-                                await userContext.requestData(
-                                    reqData,
+                                await userContext.vote(
+                                    projectId,
+                                    emoji,
                                     reqInfo.nonce ?? 0
                                 )
-                                setReqData({})
+                                setProjectId(0);
+                                setEmoji(0);
                             }}
                         >
                             Attest
