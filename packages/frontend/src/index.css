@@ -1,5 +1,16 @@
+html {
+    height: 100%;
+}
+
 body {
     /* font-family: sans-serif, helvetica; */
     font-family: 'Azeret Mono';
     font-weight: 200;
+    height: 100%;
+    margin: 0;
+    background-color: black;
+}
+
+#root {
+    height: 100%;
 }
