@@ -79,9 +79,9 @@ class User {
         this.provableData = await this.userState.getProvableData()
     }
 
-    async signup() {
+    async signup(claimCode: string) {
         if (!this.userState) throw new Error('user state not initialized')
-
+        if (!claimCode) throw new Error('claim code not provided')
         const signupProof = await this.userState.genUserSignUpProof()
         const data = await fetch(`${SERVER}/api/signup`, {
             method: 'POST',
@@ -91,6 +91,7 @@ class User {
             body: JSON.stringify({
                 publicSignals: signupProof.publicSignals,
                 proof: signupProof.proof,
+                claimCode: claimCode,
             }),
         }).then((r) => r.json())
         await this.provider.waitForTransaction(data.hash)
