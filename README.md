@@ -10,3 +10,39 @@ Want to express your opinion without breaking your introvert bubble? We've got y
 voteathon is the app that transforms the voting process into a super cool, ultra-private, and engaging experience! Say goodbye to the old-fashioned way of voting and embrace the future with this application.
 
 Our secret sauce? The cutting-edge UniRep protocol! No, it's not a spell from a fantasy novel, but it's just as magical. It ensures complete anonymity while maintaining the highest level of security. Your vote counts, but your identity remains hidden – giving you the freedom to cast your vote in total privacy.
+
+# Start the app locally
+
+### 1 Build the files
+
+```shell
+yarn build
+```
+
+### 2 Start a node
+
+```shell
+yarn contracts hardhat node
+```
+
+### 3 Deploy smart contracts
+
+in new terminal window, from root:
+
+```shell
+yarn contracts deploy
+```
+
+### 4 Start a relayer (backend)
+
+```shell
+yarn relay start
+```
+
+### 5 Start a frontend
+
+in new terminal window, from root:
+
+```shell
+yarn frontend start
+```
