@@ -1,1 +1,159 @@
-[{"inputs":[{"internalType":"contract Unirep","name":"_unirep","type":"address"},{"internalType":"contract IVerifier","name":"_dataVerifier","type":"address"},{"internalType":"uint48","name":"_epochLength","type":"uint48"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"uint256[5]","name":"publicSignals","type":"uint256[5]"},{"internalType":"uint256[8]","name":"proof","type":"uint256[8]"}],"name":"claim","outputs":[],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"projectID","type":"uint256"},{"internalType":"uint256[]","name":"publicSignals","type":"uint256[]"},{"internalType":"uint256[8]","name":"proof","type":"uint256[8]"}],"name":"joinProject","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unirep","outputs":[{"internalType":"contract Unirep","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"publicSignals","type":"uint256[]"},{"internalType":"uint256[8]","name":"proof","type":"uint256[8]"}],"name":"userSignUp","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256[5]","name":"publicSignals","type":"uint256[5]"},{"internalType":"uint256[8]","name":"proof","type":"uint256[8]"}],"name":"verifyDataProof","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"projectID","type":"uint256"},{"internalType":"enum Emoji","name":"emoji","type":"uint8"},{"internalType":"uint256[]","name":"publicSignals","type":"uint256[]"},{"internalType":"uint256[8]","name":"proof","type":"uint256[8]"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+[
+    {
+        "inputs": [
+            {
+                "internalType": "contract Unirep",
+                "name": "_unirep",
+                "type": "address"
+            },
+            {
+                "internalType": "contract IVerifier",
+                "name": "_dataVerifier",
+                "type": "address"
+            },
+            {
+                "internalType": "uint48",
+                "name": "_epochLength",
+                "type": "uint48"
+            },
+            { "internalType": "uint8", "name": "_numTeams", "type": "uint8" }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256[5]",
+                "name": "publicSignals",
+                "type": "uint256[5]"
+            },
+            {
+                "internalType": "uint256[8]",
+                "name": "proof",
+                "type": "uint256[8]"
+            }
+        ],
+        "name": "claim",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "projectID",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "publicSignals",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[8]",
+                "name": "proof",
+                "type": "uint256[8]"
+            }
+        ],
+        "name": "joinProject",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "numTeams",
+        "outputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "name": "scores",
+        "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "unirep",
+        "outputs": [
+            { "internalType": "contract Unirep", "name": "", "type": "address" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "publicSignals",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[8]",
+                "name": "proof",
+                "type": "uint256[8]"
+            }
+        ],
+        "name": "userSignUp",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256[5]",
+                "name": "publicSignals",
+                "type": "uint256[5]"
+            },
+            {
+                "internalType": "uint256[8]",
+                "name": "proof",
+                "type": "uint256[8]"
+            }
+        ],
+        "name": "verifyDataProof",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "projectID",
+                "type": "uint256"
+            },
+            { "internalType": "enum Emoji", "name": "emoji", "type": "uint8" },
+            {
+                "internalType": "uint256[]",
+                "name": "publicSignals",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[8]",
+                "name": "proof",
+                "type": "uint256[8]"
+            }
+        ],
+        "name": "vote",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "winnerScore",
+        "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
