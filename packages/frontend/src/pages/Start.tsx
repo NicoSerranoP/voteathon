@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import './start.css'
@@ -9,6 +9,18 @@ import User from '../contexts/User'
 
 export default observer(() => {
     const userContext = React.useContext(User)
+    const [claimCode, setClaimCode] = useState('TEST-TEST')
+    const [claimCodeError, setClaimCodeError] = useState(true)
+
+    const handleClaimCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const regex = /^\w+-\w+/
+        setClaimCode(event.target.value)
+        if (regex.test(event.target.value) && event.target.value != "TEST-TEST") {
+            setClaimCodeError(false)
+        } else {
+            setClaimCodeError(true)
+        }
+    }
 
     // if (!userContext.userState) {
     //     return (
@@ -42,20 +54,27 @@ export default observer(() => {
                 </p>
                 <div className="join">
                     {!userContext.hasSignedUp ? (
-                        <Button
-                            onClick={() => {
-                                if (!userContext.userState) return
-                                return userContext.signup()
-                            }}
-                        >
-                            {userContext.userState ? 'Join' : 'Initializing...'}
-                            <span style={{ marginLeft: '12px' }}>
-                                <img
-                                    src={require('../../public/arrow.svg')}
-                                    alt="right arrow"
-                                />
-                            </span>
-                        </Button>
+                        <>
+                            <div>
+                                <label htmlFor="claimCode">Claim Code:</label>
+                                <input type="text" id="claimCode" value={claimCode} onChange={handleClaimCodeChange} />
+                                {claimCodeError && <div className="error">Claim code should be in the format of WORD-WORD</div>}
+                            </div>
+                            <Button
+                                onClick={() => {
+                                    if (!userContext.userState || !claimCodeError) return
+                                    return userContext.signup(claimCode)
+                                }}
+                            >
+                                {userContext.userState ? 'Join' : 'Initializing...'}
+                                <span style={{ marginLeft: '12px' }}>
+                                    <img
+                                        src={require('../../public/arrow.svg')}
+                                        alt="right arrow"
+                                    />
+                                </span>
+                            </Button>
+                        </>
                     ) : (
                         <div>
                             <p

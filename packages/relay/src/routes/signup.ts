@@ -6,22 +6,55 @@ import { Synchronizer } from '@unirep/core'
 import { APP_ADDRESS } from '../config'
 import TransactionManager from '../singletons/TransactionManager'
 import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/Voteathon.sol/Voteathon.json'
+import ClaimCodeManager, {ClaimCodeStatus, ClaimCodeStatusEnum} from '../../../claimCodes/src/index';
+import fs from 'fs';
+const CLAIM_CODE_PATH = '../../../../claimCodes.json'
+
+let claimCodes = undefined;
+
+try {
+    claimCodes = JSON.parse(fs.readFileSync(CLAIM_CODE_PATH, 'utf8'));
+  } catch (error) {
+    console.error('Error reading claimCodes.json:', error);
+}
+
+const claimCodeManager = new ClaimCodeManager(claimCodes? claimCodes : undefined);
 
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
     app.post('/api/signup', async (req, res) => {
         try {
-            const { publicSignals, proof } = req.body
+            const { publicSignals, proof, claimCode } = req.body
 
             const signupProof = new SignupProof(
                 publicSignals,
                 proof,
                 synchronizer.prover
             )
+
+            const claimCodeStatus = await claimCodeManager.claimCode(claimCode)
+
+            if (claimCodeStatus.status === ClaimCodeStatusEnum.ALREADY_USED) {
+                res.status(400).json({ error: 'CLAIM CODE USED, CONTACT ADMINS' })
+                return
+            } else if (claimCodeStatus.status === ClaimCodeStatusEnum.NOT_FOUND) {
+                res.status(400).json({ error: 'CLAIM CODE NOT FOUND' })
+                return
+            }
+            else if (claimCodeStatus.status === ClaimCodeStatusEnum.CLAIMED) {
+                const projectName = claimCodeStatus.name;
+                console.info('CLAIM CODE CLAIMED: ' + claimCode)
+            } else {
+                res.status(400).json({ error: 'CLAIM CODE UNKNOWN STATUS' })
+                console.error(claimCodeStatus)
+                return
+            }
+
             const valid = await signupProof.verify()
             if (!valid) {
                 res.status(400).json({ error: 'Invalid proof' })
                 return
             }
+
             const currentEpoch = synchronizer.calcCurrentEpoch()
             if (currentEpoch !== Number(signupProof.epoch)) {
                 res.status(400).json({ error: 'Wrong epoch' })
