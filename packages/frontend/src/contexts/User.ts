@@ -155,6 +155,31 @@ class User {
         await this.loadData()
     }
 
+    async claim(
+        epkNonce: number
+    ) {
+        if (!this.userState) throw new Error('user state not initialized')
+
+        const epochKeyProof = await this.userState.genEpochKeyProof({
+            nonce: epkNonce,
+        })
+        const data = await fetch(`${SERVER}/api/claim`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(
+                stringifyBigInts({
+                    publicSignals: epochKeyProof.publicSignals,
+                    proof: epochKeyProof.proof,
+                })
+            ),
+        }).then((r) => r.json())
+        await this.provider.waitForTransaction(data.hash)
+        await this.userState.waitForSync()
+        await this.loadData()
+    }
+
     async stateTransition() {
         if (!this.userState) throw new Error('user state not initialized')
 
