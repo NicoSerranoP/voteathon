@@ -1,6 +1,7 @@
 {
     "projects": [
         {
+            "id": 0,
             "name": "Test Project 1",
             "description": "Hack the planet",
             "challenge": "Will it blend?",

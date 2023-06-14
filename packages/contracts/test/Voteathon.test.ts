@@ -35,6 +35,7 @@ describe('Voteathon', function () {
     let unirep
     let voteathon
     const projectID = 0
+    const numTeams = 6
 
     // epoch length
     const epochLength = 300
@@ -52,7 +53,8 @@ describe('Voteathon', function () {
         voteathon = await VoteathonF.deploy(
             unirep.address,
             verifier.address,
-            epochLength
+            epochLength,
+            numTeams
         )
         await voteathon.deployed()
     })
@@ -66,7 +68,7 @@ describe('Voteathon', function () {
         userState.sync.stop()
     })
 
-    it('votee sign up', async () => {
+    it('hacker sign up', async () => {
         const userState = await genUserState(hacker, voteathon)
 
         // generate
@@ -148,6 +150,35 @@ describe('Voteathon', function () {
             dataProof.proof
         )
         expect(isValid).to.be.true
+        userState.sync.stop()
+    })
+
+    it('claim NFT', async () => {
+        const userState = await genUserState(hacker, voteathon)
+        const epoch = await userState.sync.loadCurrentEpoch()
+        const stateTree = await userState.sync.genStateTree(epoch)
+        const index = await userState.latestStateTreeLeafIndex(epoch)
+        const stateTreeProof = stateTree.createProof(index)
+        const attesterId = voteathon.address
+        const data = await userState.getProvableData()
+        const value = Array(SUM_FIELD_COUNT).fill(0)
+        const circuitInputs = stringifyBigInts({
+            identity_secret: hacker.secret,
+            state_tree_indexes: stateTreeProof.pathIndices,
+            state_tree_elements: stateTreeProof.siblings,
+            data: data,
+            epoch: epoch,
+            attester_id: attesterId,
+            value: value,
+        })
+        const p = await prover.genProofAndPublicSignals(
+            'dataProof',
+            circuitInputs
+        )
+        const dataProof = new DataProof(p.publicSignals, p.proof, prover)
+        await voteathon
+            .claim(dataProof.publicSignals, dataProof.proof)
+            .then((t) => t.wait())
         userState.sync.stop()
     })
 })
