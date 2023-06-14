@@ -18,13 +18,13 @@ export async function deployApp() {
     const verifierF = await ethers.getContractFactory('DataProofVerifier')
     const verifier = await verifierF.deploy()
     await verifier.deployed()
-    const App = await ethers.getContractFactory('UnirepApp')
+    const App = await ethers.getContractFactory('Voteathon')
     const app = await App.deploy(unirep.address, verifier.address, epochLength)
 
     await app.deployed()
 
     console.log(
-        `Unirep app with epoch length ${epochLength} is deployed to ${app.address}`
+        `Voteathon app with epoch length ${epochLength} is deployed to ${app.address}`
     )
 
     const config = `export default {

@@ -1,8 +1,8 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import UNIREP_APP_ABI from '../artifacts/contracts/UnirepApp.sol/UnirepApp.json'
+import VOTEATHON_ABI from '../artifacts/contracts/Voteathon.sol/Voteathon.json'
 
 fs.writeFileSync(
-    path.join(__dirname, '../abi/UnirepApp.json'),
-    JSON.stringify(UNIREP_APP_ABI.abi)
+    path.join(__dirname, '../abi/Voteathon.json'),
+    JSON.stringify(VOTEATHON_ABI.abi)
 )
