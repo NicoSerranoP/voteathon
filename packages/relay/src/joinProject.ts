@@ -5,6 +5,7 @@ import { SnarkProof } from '@unirep/utils'
 import { APP_ADDRESS } from './config'
 import TransactionManager from './singletons/TransactionManager'
 import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/Voteathon.sol/Voteathon.json'
+import { InvalidProofError } from './errors'
 
 export const joinProject = (synchronizer: Synchronizer) => 
     async (
@@ -19,8 +20,7 @@ export const joinProject = (synchronizer: Synchronizer) =>
     )
     const valid = await epochKeyProof.verify()
     if (!valid) {
-        // TODO Turn to HTTP 400 in route via custom error
-        throw new Error('Invalid proof')
+        throw new InvalidProofError('Invalid proof')
     }
     const appContract = new ethers.Contract(APP_ADDRESS, UNIREP_APP.abi)
 
