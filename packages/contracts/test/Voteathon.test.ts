@@ -31,14 +31,16 @@ async function genUserState(id, app) {
     return userState
 }
 
-describe('Unirep App', function () {
+describe('Voteathon', function () {
     let unirep
-    let app
+    let voteathon
+    const projectID = 0
 
     // epoch length
     const epochLength = 300
     // generate random user id
-    const id = new Identity()
+    const voter = new Identity()
+    const hacker = new Identity()
 
     it('deployment', async function () {
         const [deployer] = await ethers.getSigners()
@@ -46,34 +48,58 @@ describe('Unirep App', function () {
         const verifierF = await ethers.getContractFactory('DataProofVerifier')
         const verifier = await verifierF.deploy()
         await verifier.deployed()
-        const App = await ethers.getContractFactory('UnirepApp')
-        app = await App.deploy(unirep.address, verifier.address, epochLength)
-        await app.deployed()
+        const VoteathonF = await ethers.getContractFactory('Voteathon')
+        voteathon = await VoteathonF.deploy(
+            unirep.address,
+            verifier.address,
+            epochLength
+        )
+        await voteathon.deployed()
     })
 
-    it('user sign up', async () => {
-        const userState = await genUserState(id, app)
+    it('voter sign up', async () => {
+        const userState = await genUserState(voter, voteathon)
 
         // generate
         const { publicSignals, proof } = await userState.genUserSignUpProof()
-        await app.userSignUp(publicSignals, proof).then((t) => t.wait())
+        await voteathon.userSignUp(publicSignals, proof).then((t) => t.wait())
         userState.sync.stop()
     })
 
-    it('submit attestations', async () => {
-        const userState = await genUserState(id, app)
+    it('votee sign up', async () => {
+        const userState = await genUserState(hacker, voteathon)
 
-        const nonce = 0
-        const { publicSignals, proof, epochKey, epoch } =
-            await userState.genEpochKeyProof({ nonce })
-        await unirep
-            .verifyEpochKeyProof(publicSignals, proof)
+        // generate
+        const { publicSignals, proof } = await userState.genUserSignUpProof()
+        await voteathon.userSignUp(publicSignals, proof).then((t) => t.wait())
+        userState.sync.stop()
+    })
+
+    it('join project', async () => {
+        const userState = await genUserState(hacker, voteathon)
+
+        // generate
+        const { publicSignals, proof } = await userState.genEpochKeyProof({
+            nonce: 0,
+            revealNonce: true,
+        })
+        await voteathon
+            .joinProject(projectID, publicSignals, proof)
             .then((t) => t.wait())
+        userState.sync.stop()
+    })
 
-        const field = 0
-        const val = 10
-        await app
-            .submitAttestation(epochKey, epoch, field, val)
+    it('vote project', async () => {
+        const userState = await genUserState(voter, voteathon)
+        const emoji = 0
+
+        // generate
+        const { publicSignals, proof } = await userState.genEpochKeyProof({
+            nonce: 1,
+            revealNonce: true,
+        })
+        await voteathon
+            .vote(projectID, emoji, publicSignals, proof)
             .then((t) => t.wait())
         userState.sync.stop()
     })
@@ -82,8 +108,8 @@ describe('Unirep App', function () {
         await ethers.provider.send('evm_increaseTime', [epochLength])
         await ethers.provider.send('evm_mine', [])
 
-        const newEpoch = await unirep.attesterCurrentEpoch(app.address)
-        const userState = await genUserState(id, app)
+        const newEpoch = await unirep.attesterCurrentEpoch(voteathon.address)
+        const userState = await genUserState(hacker, voteathon)
         const { publicSignals, proof } =
             await userState.genUserStateTransitionProof({
                 toEpoch: newEpoch,
@@ -95,16 +121,16 @@ describe('Unirep App', function () {
     })
 
     it('data proof', async () => {
-        const userState = await genUserState(id, app)
+        const userState = await genUserState(hacker, voteathon)
         const epoch = await userState.sync.loadCurrentEpoch()
         const stateTree = await userState.sync.genStateTree(epoch)
         const index = await userState.latestStateTreeLeafIndex(epoch)
         const stateTreeProof = stateTree.createProof(index)
-        const attesterId = app.address
+        const attesterId = voteathon.address
         const data = await userState.getProvableData()
         const value = Array(SUM_FIELD_COUNT).fill(0)
         const circuitInputs = stringifyBigInts({
-            identity_secret: id.secret,
+            identity_secret: hacker.secret,
             state_tree_indexes: stateTreeProof.pathIndices,
             state_tree_elements: stateTreeProof.siblings,
             data: data,
@@ -117,7 +143,7 @@ describe('Unirep App', function () {
             circuitInputs
         )
         const dataProof = new DataProof(p.publicSignals, p.proof, prover)
-        const isValid = await app.verifyDataProof(
+        const isValid = await voteathon.verifyDataProof(
             dataProof.publicSignals,
             dataProof.proof
         )
