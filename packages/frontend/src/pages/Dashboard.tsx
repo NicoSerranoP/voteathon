@@ -25,7 +25,7 @@ type ProofInfo = {
 export default observer(() => {
     const userContext = React.useContext(User)
     const [remainingTime, setRemainingTime] = React.useState<number | string>(0)
-    const [projectId, setProjectId] = React.useState<number>(0)
+    const [projectID, setProjectID] = React.useState<number>(0)
     const [emoji, setEmoji] = React.useState<Emoji>(0)
     const [reqInfo, setReqInfo] = React.useState<ReqInfo>({ nonce: 0 })
     const [proveData, setProveData] = React.useState<{
@@ -234,11 +234,11 @@ export default observer(() => {
                                     throw new Error('Needs transition')
                                 }
                                 await userContext.vote(
-                                    projectId,
+                                    projectID,
                                     emoji,
                                     reqInfo.nonce ?? 0
                                 )
-                                setProjectId(0);
+                                setProjectID(0);
                                 setEmoji(0);
                             }}
                         >

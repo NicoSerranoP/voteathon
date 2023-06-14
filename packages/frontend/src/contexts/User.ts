@@ -100,7 +100,7 @@ class User {
     }
 
     async vote(
-        projectId: number,
+        projectID: number,
         emoji: number,
         epkNonce: number
     ) {
@@ -116,7 +116,7 @@ class User {
             },
             body: JSON.stringify(
                 stringifyBigInts({
-                    projectId,
+                    projectID,
                     emoji,
                     publicSignals: epochKeyProof.publicSignals,
                     proof: epochKeyProof.proof,
