@@ -1,6 +1,5 @@
-import { generateClaimCodes, markClaimCodeAsUsed } from './claimCodes'
-import {ClaimCodeManager} from './manager'
-import type { ClaimCodeT } from './claimCodes'
+import ClaimCodeManager from './manager'
+import type { ClaimCodeT, claimCodeSetsT } from './types'
 
 export default ClaimCodeManager
-export {generateClaimCodes, markClaimCodeAsUsed, ClaimCodeT}
+export type { ClaimCodeT, claimCodeSetsT }

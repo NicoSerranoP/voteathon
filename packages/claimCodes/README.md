@@ -2,19 +2,29 @@
 
 ## General Usage
 ```ts
-import {generateClaimCodes, markClaimCodeAsUsed} from 'ClaimCodes'
-import { ClaimCodeT } from 'ClaimCodes'
+import ClaimCodeManager from './manager'
 
-// generateClaimCodes returns an array of ClaimCodeT objects
-const claimCodes = generateClaimCodes(10) // [ { code: 'barely-drastic', used: false }, ...}]
+const claimCodeManager = new ClaimCodeManager()
 
-let code = claimCodes[0].code
+console.log("Generateing 10 claim codes for Project1")
+const p1 = claimCodeManager.generateClaimCodeSet(10, "Project1")
+const claimCode1 = p1[0].code
+console.log("Generating 3 claim codes not assigned to a project")
+claimCodeManager.generateClaimCodeSet(3)
 
-// markClaimCodeAsUsed returns a new object with the claimCodes array updated, a status message, and a status code
-const claimCodeStatus = markClaimCodeAsUsed(code, claimCodes)
-console.log(claimCodeStatus.status) // CLAIMED
-console.log(claimCodeStatus.message) // "Successfully claimed Code"
-console.log(claimCodeStatus.claimCodes) // Updated ClaimCodes array
+console.log("Generated claim codes:")
+console.log(claimCodeManager.getClaimCodeSets())
+
+console.log("Claiming code " + claimCode1 + " from Project1")
+claimCodeManager.claimCode(claimCode1)
+console.log(claimCodeManager.getClaimCodeSets())
+
+const SINGLES = claimCodeManager.getClaimCodeSet() // returns "SINGLES" claim code set if no name is provided
+const claimCode2 = SINGLES[0].code
+
+console.log("Claiming code " + claimCode2 + " from no project")
+claimCodeManager.claimCode(claimCode2)
+console.log(claimCodeManager.getClaimCodeSets())
 ```
 
 ## Managing multiple sets of claim codes
