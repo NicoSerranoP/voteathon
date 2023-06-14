@@ -155,7 +155,7 @@ class User {
         await this.loadData()
     }
 
-    async claim(
+    async claimPrize(
         epkNonce: number
     ) {
         if (!this.userState) throw new Error('user state not initialized')
@@ -163,7 +163,7 @@ class User {
         const epochKeyProof = await this.userState.genEpochKeyProof({
             nonce: epkNonce,
         })
-        const data = await fetch(`${SERVER}/api/claim`, {
+        const data = await fetch(`${SERVER}/api/prize/claim`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
