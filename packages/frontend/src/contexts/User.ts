@@ -23,8 +23,8 @@ class User {
     }
 
     async load() {
-        const id: string = localStorage.getItem('id') ?? ''
-        const identity = new Identity(id)
+        const id: string | null = localStorage.getItem('id')
+        const identity = new Identity(id ?? undefined)
         if (!id) {
             localStorage.setItem('id', identity.toString())
         }
@@ -79,9 +79,9 @@ class User {
         this.provableData = await this.userState.getProvableData()
     }
 
-    async signup() {
+    async signup(claimCode: string) {
         if (!this.userState) throw new Error('user state not initialized')
-
+        if (!claimCode) throw new Error('claim code not provided')
         const signupProof = await this.userState.genUserSignUpProof()
         const data = await fetch(`${SERVER}/api/signup`, {
             method: 'POST',
@@ -91,6 +91,7 @@ class User {
             body: JSON.stringify({
                 publicSignals: signupProof.publicSignals,
                 proof: signupProof.proof,
+                claimCode: claimCode,
             }),
         }).then((r) => r.json())
         await this.provider.waitForTransaction(data.hash)
@@ -145,6 +146,31 @@ class User {
                 stringifyBigInts({
                     projectID,
                     emoji,
+                    publicSignals: epochKeyProof.publicSignals,
+                    proof: epochKeyProof.proof,
+                })
+            ),
+        }).then((r) => r.json())
+        await this.provider.waitForTransaction(data.hash)
+        await this.userState.waitForSync()
+        await this.loadData()
+    }
+
+    async claim(
+        epkNonce: number
+    ) {
+        if (!this.userState) throw new Error('user state not initialized')
+
+        const epochKeyProof = await this.userState.genEpochKeyProof({
+            nonce: epkNonce,
+        })
+        const data = await fetch(`${SERVER}/api/claim`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(
+                stringifyBigInts({
                     publicSignals: epochKeyProof.publicSignals,
                     proof: epochKeyProof.proof,
                 })
