@@ -11,13 +11,18 @@ export interface ClaimCodeStatus {
   status: ClaimCodeStatusEnum
   message: string
   claimCodes: ClaimCodeT[]
-  name?: string
+  projectID?: number
 }
 
 export default class ClaimCodeManager {
   claimCodeSets: claimCodeSetsT;
 
-  constructor(claimCodeSetInput: claimCodeSetsT = { "SINGLES": [] }) {
+  constructor(claimCodeSetInput: claimCodeSetsT = { 0: [] }) {
+    for (let claimCodeSet in claimCodeSetInput) {
+      if (typeof (claimCodeSet) !== "number") {
+        throw new Error("Claim code set must be a number")
+      }
+    }
     this.claimCodeSets = claimCodeSetInput
   }
 
@@ -44,14 +49,14 @@ export default class ClaimCodeManager {
     return claimCodes;
   }
 
-  generateClaimCodeSet(count: number, name: string = "SINGLES") {
-    if (this.claimCodeSets[name]) {
-      this.claimCodeSets[name] = this.generateClaimCodes(count, this.claimCodeSets[name])
+  generateClaimCodeSet(count: number, projectID: number = 0) {
+    if (this.claimCodeSets[projectID]) {
+      this.claimCodeSets[projectID] = this.generateClaimCodes(count, this.claimCodeSets[projectID])
     } else {
-      this.claimCodeSets[name] = this.generateClaimCodes(count)
+      this.claimCodeSets[projectID] = this.generateClaimCodes(count)
     }
 
-    return this.claimCodeSets[name]
+    return this.claimCodeSets[projectID]
   }
 
   private markClaimCodeAsUsed(code: string, claimCodes: ClaimCodeT[]): ClaimCodeStatus {
@@ -78,11 +83,11 @@ export default class ClaimCodeManager {
     for (let claimCodeSet in this.claimCodeSets) {
       let result = this.markClaimCodeAsUsed(code, this.claimCodeSets[claimCodeSet])
       if (result.status === ClaimCodeStatusEnum.CLAIMED) {
-        result.name = claimCodeSet
+        result.projectID = Number(claimCodeSet)
         return result
       }
       else if (result.status === ClaimCodeStatusEnum.ALREADY_USED) {
-        result.name = claimCodeSet
+        result.projectID = Number(claimCodeSet)
         return result
       }
       else {
@@ -96,11 +101,11 @@ export default class ClaimCodeManager {
     return this.claimCodeSets
   }
 
-  getClaimCodeSet(name: string = "SINGLES"): ClaimCodeT[] {
-    if (this.claimCodeSets[name]) {
-      return this.claimCodeSets[name]
+  getClaimCodeSet(projectID: number = 0): ClaimCodeT[] {
+    if (this.claimCodeSets[projectID]) {
+      return this.claimCodeSets[projectID]
     } else {
-      throw new Error(`Claim code set with name ${name} does not exist`)
+      throw new Error(`Claim code set with projectID ${projectID} does not exist`)
     }
   }
 }

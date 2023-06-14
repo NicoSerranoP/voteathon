@@ -3,4 +3,4 @@ export type ClaimCodeT = {
   used: boolean;
 }
 
-export type claimCodeSetsT = {[key: string]: ClaimCodeT[]}
+export type claimCodeSetsT = {[key: number]: ClaimCodeT[]}
