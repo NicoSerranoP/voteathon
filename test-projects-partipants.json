@@ -6,24 +6,33 @@
             "challenge": "Will it blend?",
             "deliverables": "Stuxnet executable",
             "repoUrl": "https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
-            "leads": [{
-                "participantId": 0
-            }],
-            "hackers": [{
-                "participantId": 1
-            }, {
-                "participantId": 2
-            }]
+            "leads": [
+                {
+                    "participantId": 0
+                }
+            ],
+            "hackers": [
+                {
+                    "participantId": 1
+                },
+                {
+                    "participantId": 2
+                }
+            ]
         }
     ],
-    "participants": [{
-        "id": 0,
-        "name": "Steve Steverson"
-    }, {
-        "id": 1,
-        "name": "Cotton-eyed Joe"
-    }, {
-        "id": 2,
-        "name": "Coolie McCoolface"
-    }]
+    "participants": [
+        {
+            "id": 0,
+            "name": "Steve Steverson"
+        },
+        {
+            "id": 1,
+            "name": "Cotton-eyed Joe"
+        },
+        {
+            "id": 2,
+            "name": "Coolie McCoolface"
+        }
+    ]
 }

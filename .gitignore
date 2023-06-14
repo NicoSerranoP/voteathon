@@ -2,4 +2,3 @@ node_modules/
 packages/claimCodes/dist
 
 .DS_Store
-config.ts
