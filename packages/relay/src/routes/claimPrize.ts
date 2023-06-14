@@ -8,7 +8,7 @@ import TransactionManager from '../singletons/TransactionManager'
 import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/Voteathon.sol/Voteathon.json'
 
 export default (app: Express, _db: DB, synchronizer: Synchronizer) => {
-    app.post('/api/claim', async (req, res) => {
+    app.post('/api/prize/claim', async (req, res) => {
         try {
             const { publicSignals, proof } = req.body
 
