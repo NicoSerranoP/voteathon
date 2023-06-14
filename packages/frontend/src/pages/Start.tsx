@@ -1,16 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import './start.css'
 import Tooltip from '../components/Tooltip'
 import Button from '../components/Button'
-import logo from '../images/voteathon-emblem.png';
 
 import User from '../contexts/User'
 // import imageName from '../../public/yellow-curve-bg.png';
 
 export default observer(() => {
     const userContext = React.useContext(User)
+    const [claimCode, setClaimCode] = useState('TEST-TEST')
+    const [claimCodeError, setClaimCodeError] = useState(true)
+
+    const handleClaimCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const regex = /^\w+-\w+/
+        setClaimCode(event.target.value)
+        if (regex.test(event.target.value) && event.target.value != "TEST-TEST") {
+            setClaimCodeError(false)
+        } else {
+            setClaimCodeError(true)
+        }
+    }
 
     // if (!userContext.userState) {
     //     return (
@@ -39,7 +50,6 @@ export default observer(() => {
             </div>
 
             <div className="right-container">
-                <img src={logo} alt="voteathon" />
             </div>
         </div>
     )

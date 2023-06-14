@@ -19,6 +19,6 @@
         "useDefineForClassFields": true,
         "outDir": "build"
     },
-    "include": ["src"],
+    "include": ["src", "custom.d.ts"],
     "exclude": ["node_modules", "typings", "build/**/*"]
 }
