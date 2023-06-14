@@ -1,5 +1,7 @@
 # voteathon
 ## Built for hackers by the hackers.
+
+![github cover](https://github.com/NicoSerranoP/voteathon/assets/16527634/338b93f1-7cd3-44e0-8771-aef726bbcf94)
 A private voting app to decide your favorite hackathon project
 
 Want to express your opinion without breaking your introvert bubble? We've got you covered with voteathon, your trusty sidekick in the bustling hackathon arena.
