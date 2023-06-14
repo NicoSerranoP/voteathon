@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import './start.css'
 import Tooltip from '../components/Tooltip'
 import Button from '../components/Button'
+import logo from '../assets/voteathon-emblem.png';
 
 import User from '../contexts/User'
 // import imageName from '../../public/yellow-curve-bg.png';
@@ -33,6 +34,14 @@ export default observer(() => {
 
     return (
         <div className="main-container" style={{ backgroundImage: `url("/yellow-curve-bg.png")` }}>
+            <div className="right-container">
+                <img src={logo} alt="voteathon" />
+
+                <div className="info-title">
+                    Please Enter your full name to claim the ID
+                </div>
+            </div>
+
             <div className="title">
                 voteathon is built for hackers by the hackers.
             </div>
@@ -47,9 +56,6 @@ export default observer(() => {
                     <li>Wait for the final result</li>
                     <li>Claim the reward</li>
                 </ol>
-            </div>
-
-            <div className="right-container">
             </div>
         </div>
     )

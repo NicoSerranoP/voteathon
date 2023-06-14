@@ -1,10 +1,10 @@
 import { styled } from 'styled-components'
-import VoteathonIcon from '../assets/logo.svg'
+{/* import VoteathonIcon from '../assets/logo.svg' */}
 
 const Header = () => {
     return (
         <Container>
-            <img src={VoteathonIcon}></img>
+            {/* <img src={VoteathonIcon}></img> */}
             <h1>voteathon</h1>
         </Container>
     )
