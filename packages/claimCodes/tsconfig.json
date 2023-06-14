@@ -1,13 +1,10 @@
 {
-  "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "dist",
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "preserveConstEnums": true,
-    "lib": [
-      "es2016",
-      "dom"
-    ],
-  }
+    "compilerOptions": {
+        "rootDir": "./src",
+        "outDir": "dist",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "lib": ["es2016", "dom"]
+    }
 }
