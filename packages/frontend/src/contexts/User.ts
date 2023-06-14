@@ -99,6 +99,33 @@ class User {
         this.latestTransitionedEpoch = this.userState.sync.calcCurrentEpoch()
     }
 
+    async joinProject(
+        projectID: number,
+        epkNonce: number
+    ) {
+        if (!this.userState) throw new Error('user state not initialized')
+
+        const epochKeyProof = await this.userState.genEpochKeyProof({
+            nonce: epkNonce,
+        })
+        const data = await fetch(`${SERVER}/api/project/join`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(
+                stringifyBigInts({
+                    projectID,
+                    publicSignals: epochKeyProof.publicSignals,
+                    proof: epochKeyProof.proof,
+                })
+            ),
+        }).then((r) => r.json())
+        await this.provider.waitForTransaction(data.hash)
+        await this.userState.waitForSync()
+        await this.loadData()
+    }
+
     async vote(
         projectID: number,
         emoji: number,
@@ -109,7 +136,7 @@ class User {
         const epochKeyProof = await this.userState.genEpochKeyProof({
             nonce: epkNonce,
         })
-        const data = await fetch(`${SERVER}/api/request`, {
+        const data = await fetch(`${SERVER}/api/vote`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
