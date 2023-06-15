@@ -24,7 +24,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
     app.post('/api/signup', async (req, res) => {
         try {
             const { publicSignals, proof, claimCode } = req.body
-
+            let projectID: number | undefined = undefined;
             const signupProof = new SignupProof(
                 publicSignals,
                 proof,
@@ -41,7 +41,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
                 return
             }
             else if (claimCodeStatus.status === ClaimCodeStatusEnum.CLAIMED) {
-                const projectName = claimCodeStatus.projectID;
+                projectID = claimCodeStatus.projectID;
                 fs.writeFileSync(CLAIM_CODE_PATH, JSON.stringify(claimCodeManager.getClaimCodeSets()));
                 console.info('CLAIM CODE CLAIMED: ' + claimCode)
             } else {
@@ -72,7 +72,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
                 APP_ADDRESS,
                 calldata
             )
-            res.json({ hash })
+            res.json({ hash: hash, projectID: projectID })
         } catch (error) {
             res.status(500).json({ error })
         }

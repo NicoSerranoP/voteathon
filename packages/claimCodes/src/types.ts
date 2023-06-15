@@ -1,6 +1,13 @@
 export type ClaimCodeT = {
-  code: string;
-  used: boolean;
+    code: string
+    used: boolean
 }
 
-export type claimCodeSetsT = {[key: number]: ClaimCodeT[]}
+export type ClaimCodeSetsT = {
+    [key: number | string]: {
+        claimCodes: ClaimCodeT[]
+        projectID: number
+        generationTime?: number
+        name?: string
+    }
+}

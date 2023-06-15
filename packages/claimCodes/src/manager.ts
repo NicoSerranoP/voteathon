@@ -1,111 +1,151 @@
-import bip39ish from "./bip39ish";
-import { ClaimCodeT, claimCodeSetsT } from "./types";
+import bip39ish, { bip39 } from './bip39ish'
+import { ClaimCodeT, ClaimCodeSetsT } from './types'
 
 export enum ClaimCodeStatusEnum {
-  CLAIMED = "CLAIMED",
-  NOT_FOUND = "NOT_FOUND",
-  ALREADY_USED = "ALREADY_USED",
+    CLAIMED = 'CLAIMED',
+    NOT_FOUND = 'NOT_FOUND',
+    ALREADY_USED = 'ALREADY_USED',
 }
 
 export interface ClaimCodeStatus {
-  status: ClaimCodeStatusEnum
-  message: string
-  claimCodes: ClaimCodeT[]
-  projectID?: number
+    status: ClaimCodeStatusEnum
+    message: string
+    claimCodes: ClaimCodeT[]
+    projectID?: number
+}
+
+const emptyClaimCodeSet: ClaimCodeSetsT = {
+    '0': {
+        claimCodes: [],
+        projectID: 0,
+        generationTime: Date.now(),
+        name: 'UNASSIGNED',
+    },
 }
 
 export default class ClaimCodeManager {
-  claimCodeSets: claimCodeSetsT;
+    claimCodeSets: ClaimCodeSetsT
 
-  constructor(claimCodeSetInput: claimCodeSetsT = { 0: [] }) {
-    for (let claimCodeSet in claimCodeSetInput) {
-      if (typeof (claimCodeSet) !== "number") {
-        throw new Error("Claim code set must be a number")
-      }
+    constructor(claimCodeSetInput: ClaimCodeSetsT = emptyClaimCodeSet) {
+        this.claimCodeSets = claimCodeSetInput
     }
-    this.claimCodeSets = claimCodeSetInput
-  }
 
-  private generateRandomClaimCode() {
-    return bip39ish[Math.floor(Math.random() * bip39ish.length)] + "-" + bip39ish[Math.floor(Math.random() * bip39ish.length)];
-  }
+    private static generateRandomClaimCode(length: number = 2) {
+        if (length < 1) throw new Error('length must be greater than 0')
+        if (length > 24) throw new Error('length must be less than 24')
 
-  private generateClaimCodes(count: number, claimCodes: ClaimCodeT[] = []): ClaimCodeT[] {
-    let codes: string[] = []
-    for (let i = 0; i < count; i++) {
-        let pass = false;
-        while (pass == false) {
-            let code: string = this.generateRandomClaimCode();
-            if (codes.includes(code)) {
-                continue;
-            }
-            pass = true;
+        let code: string[] = []
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * bip39ish.length)
+
+            code.push(bip39ish[randomIndex])
         }
-        claimCodes.push({
-            code: this.generateRandomClaimCode(),
-            used: false
-        });
-    }
-    return claimCodes;
-  }
-
-  generateClaimCodeSet(count: number, projectID: number = 0) {
-    if (this.claimCodeSets[projectID]) {
-      this.claimCodeSets[projectID] = this.generateClaimCodes(count, this.claimCodeSets[projectID])
-    } else {
-      this.claimCodeSets[projectID] = this.generateClaimCodes(count)
+        return code.join('-')
     }
 
-    return this.claimCodeSets[projectID]
-  }
+    private static generateClaimCodes(
+        count: number,
+        claimCodes: ClaimCodeT[] = []
+    ): ClaimCodeT[] {
+        let codes: string[] = []
+        for (let i = 0; i < count; i++) {
+            let pass = false
+            while (pass == false) {
+                let code: string = this.generateRandomClaimCode()
+                if (codes.includes(code)) {
+                    continue
+                }
+                pass = true
+            }
+            claimCodes.push({
+                code: this.generateRandomClaimCode(),
+                used: false,
+            })
+        }
+        return claimCodes
+    }
 
-  private markClaimCodeAsUsed(code: string, claimCodes: ClaimCodeT[]): ClaimCodeStatus {
-    let message = "Successfully claimed code";
-    let status = ClaimCodeStatusEnum.NOT_FOUND;
-    for (let claimCode of claimCodes) {
-        if (claimCode.code === code) {
-            if (claimCode.used) {
-                message = `Claim code ${code} has already been used`
-                status = ClaimCodeStatusEnum.ALREADY_USED
+    private static markClaimCodeAsUsed(
+        code: string,
+        claimCodes: ClaimCodeT[]
+    ): ClaimCodeStatus {
+        let message = 'Successfully claimed code'
+        let status = ClaimCodeStatusEnum.NOT_FOUND
+        for (let claimCode of claimCodes) {
+            if (claimCode.code === code) {
+                if (claimCode.used) {
+                    message = `Claim code ${code} has already been used`
+                    status = ClaimCodeStatusEnum.ALREADY_USED
+                    return { status, message, claimCodes }
+                }
+                claimCode.used = true
+                status = ClaimCodeStatusEnum.CLAIMED
                 return { status, message, claimCodes }
             }
-            claimCode.used = true;
-            status = ClaimCodeStatusEnum.CLAIMED
-            return {status, message, claimCodes};
+        }
+        message = `Claim code ${code} does not exist`
+        status = ClaimCodeStatusEnum.NOT_FOUND
+        return { status, message, claimCodes }
+    }
+
+    public generateClaimCodeSet(
+        count: number,
+        projectID: number | string = 0,
+        name: string = ''
+    ) {
+        projectID = projectID.toString()
+        if (this.claimCodeSets[projectID]) {
+            this.claimCodeSets[projectID].claimCodes =
+                ClaimCodeManager.generateClaimCodes(
+                    count,
+                    this.claimCodeSets[projectID].claimCodes
+                )
+        } else {
+            this.claimCodeSets[projectID] = {
+                claimCodes: ClaimCodeManager.generateClaimCodes(count),
+                projectID: Number(projectID),
+                generationTime: Date.now(),
+                name: name,
+            }
+        }
+        this.claimCodeSets[projectID].projectID = Number(projectID)
+        this.claimCodeSets[projectID].generationTime = Date.now()
+        if (name) {
+            this.claimCodeSets[projectID].name = name
+        }
+        return this.claimCodeSets[projectID]
+    }
+
+    public claimCode(code: string): ClaimCodeStatus {
+        for (let claimCodeSet in this.claimCodeSets) {
+            let result = ClaimCodeManager.markClaimCodeAsUsed(
+                code,
+                this.claimCodeSets[claimCodeSet].claimCodes
+            )
+            if (result.status === ClaimCodeStatusEnum.CLAIMED) {
+                result.projectID = Number(claimCodeSet)
+                return result
+            } else if (result.status === ClaimCodeStatusEnum.ALREADY_USED) {
+                result.projectID = Number(claimCodeSet)
+                return result
+            } else {
+                continue
+            }
+        }
+        return {
+            status: ClaimCodeStatusEnum.NOT_FOUND,
+            message: `Claim code ${code} does not exist`,
+            claimCodes: [],
         }
     }
-    message = `Claim code ${code} does not exist`
-    status = ClaimCodeStatusEnum.NOT_FOUND
-    return { status, message, claimCodes }
-}
 
-  claimCode(code: string): ClaimCodeStatus {
-    for (let claimCodeSet in this.claimCodeSets) {
-      let result = this.markClaimCodeAsUsed(code, this.claimCodeSets[claimCodeSet])
-      if (result.status === ClaimCodeStatusEnum.CLAIMED) {
-        result.projectID = Number(claimCodeSet)
-        return result
-      }
-      else if (result.status === ClaimCodeStatusEnum.ALREADY_USED) {
-        result.projectID = Number(claimCodeSet)
-        return result
-      }
-      else {
-        continue
-      }
+    public getClaimCodeSets(): ClaimCodeSetsT {
+        return this.claimCodeSets
     }
-    return { status: ClaimCodeStatusEnum.NOT_FOUND, message: `Claim code ${code} does not exist`, claimCodes: [] }
-  }
 
-  getClaimCodeSets(): claimCodeSetsT {
-    return this.claimCodeSets
-  }
-
-  getClaimCodeSet(projectID: number = 0): ClaimCodeT[] {
-    if (this.claimCodeSets[projectID]) {
-      return this.claimCodeSets[projectID]
-    } else {
-      throw new Error(`Claim code set with projectID ${projectID} does not exist`)
+    public getClaimCodeSet(projectID: number | string): ClaimCodeSetsT {
+        projectID = projectID.toString()
+        const o = { projectID: this.claimCodeSets[projectID] }
+        return o
     }
-  }
 }
