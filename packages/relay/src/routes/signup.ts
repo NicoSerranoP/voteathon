@@ -44,7 +44,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
             }
             else if (claimCodeStatus.status === ClaimCodeStatusEnum.CLAIMED) {
                 projectID = claimCodeStatus.projectID;
-                fs.writeFileSync(CLAIM_CODE_PATH, JSON.stringify(claimCodeManager.getClaimCodeSets()));
+                fs.writeFileSync(CLAIM_CODE_PATH, JSON.stringify(claimCodeManager.getClaimCodeSets(), null, 4));
                 console.info('CLAIM CODE CLAIMED: ' + claimCode)
             } else {
                 res.status(400).json({ error: 'CLAIM CODE UNKNOWN STATUS' })

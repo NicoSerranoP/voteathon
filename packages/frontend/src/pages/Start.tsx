@@ -61,9 +61,9 @@ export default observer(() => {
                                 {claimCodeError && <div className="error">Claim code should be in the format of WORD-WORD</div>}
                             </div>
                             <Button
-                                onClick={() => {
-                                    if (!userContext.userState || !claimCodeError) return
-                                    return userContext.signup(claimCode)
+                                onClick={async () => {
+                                    if (!userContext.userState || claimCodeError) return
+                                    await userContext.signup(claimCode)
                                 }}
                             >
                                 {userContext.userState ? 'Join' : 'Initializing...'}
