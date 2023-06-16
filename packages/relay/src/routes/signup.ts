@@ -8,7 +8,9 @@ import TransactionManager from '../singletons/TransactionManager'
 import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/Voteathon.sol/Voteathon.json'
 import ClaimCodeManager, {ClaimCodeStatus, ClaimCodeStatusEnum} from '../../../claimCodes/src/index';
 import fs from 'fs';
-const CLAIM_CODE_PATH = '../../../../claimCodes.json'
+import path from 'path';
+
+const CLAIM_CODE_PATH = path.join(__dirname, '../../../../claimCodes.json')
 
 let claimCodes = undefined;
 
