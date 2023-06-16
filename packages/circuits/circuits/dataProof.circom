@@ -5,11 +5,12 @@ include "../../../node_modules/@unirep/circuits/circuits/circomlib/circuits/pose
 include "../../../node_modules/@unirep/circuits/circuits/circomlib/circuits/mux1.circom";
 include "../../../node_modules/@unirep/circuits/circuits/circomlib/circuits/gates.circom";
 include "../../../node_modules/@unirep/circuits/circuits/circomlib/circuits/comparators.circom";
-
+include "../../../node_modules/@unirep/circuits/circuits/identity.circom";
 
 template DataProof(STATE_TREE_DEPTH, FIELD_COUNT, SUM_FIELD_COUNT) {
     // State tree leaf: Identity & user state root
     signal input identity_secret;
+
     // State tree
     signal input state_tree_indexes[STATE_TREE_DEPTH];
     signal input state_tree_elements[STATE_TREE_DEPTH];
@@ -20,6 +21,9 @@ template DataProof(STATE_TREE_DEPTH, FIELD_COUNT, SUM_FIELD_COUNT) {
 
     // Prove values
     signal input value[SUM_FIELD_COUNT];
+
+    // Values that indicate if the user has claimed before.
+    signal output nullifier;
 
     /* 1. Check if user exists in the State Tree */
 
@@ -51,4 +55,11 @@ template DataProof(STATE_TREE_DEPTH, FIELD_COUNT, SUM_FIELD_COUNT) {
         get[x].out === 1;
     }
     /* End of check 2 */
+
+    /* 3. Check if user had claimed prizes before. */
+    component poseidon = Poseidon(2);
+    poseidon.inputs[0] <== identity_secret;
+    poseidon.inputs[1] <== 1;
+    nullifier <== poseidon.out;
+    /* End of check 3 */
 }
