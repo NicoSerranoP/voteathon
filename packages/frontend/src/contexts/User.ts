@@ -79,25 +79,34 @@ class User {
         this.provableData = await this.userState.getProvableData()
     }
 
-    async signup(claimCode: string) {
+    async signup(claimCode: string): Promise<{ projectID: number }> {
         if (!this.userState) throw new Error('user state not initialized')
         if (!claimCode) throw new Error('claim code not provided')
         const signupProof = await this.userState.genUserSignUpProof()
-        const data = await fetch(`${SERVER}/api/signup`, {
+        const res = await fetch(`${SERVER}/api/signup`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
-            body: JSON.stringify({
-                publicSignals: signupProof.publicSignals,
-                proof: signupProof.proof,
-                claimCode: claimCode,
-            }),
-        }).then((r) => r.json())
+            body: JSON.stringify(
+                stringifyBigInts({
+                    publicSignals: signupProof.publicSignals,
+                    proof: signupProof.proof,
+                    claimCode: claimCode,
+                }
+            )),
+        })
+        const data = await res.json();
+        if (res.status >= 400) {
+            throw new Error(`HTTP ${res.status}: ${JSON.stringify(data, null, 4)}`);
+        }
+
         await this.provider.waitForTransaction(data.hash)
         await this.userState.waitForSync()
         this.hasSignedUp = await this.userState.hasSignedUp()
         this.latestTransitionedEpoch = this.userState.sync.calcCurrentEpoch()
+
+        return { projectID: data.projectID };
     }
 
     async joinProject(
