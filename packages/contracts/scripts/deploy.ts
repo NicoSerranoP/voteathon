@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { deployUnirep } from '@unirep/contracts/deploy/index.js'
 import * as hardhat from 'hardhat'
+import teams from "../../../test-projects-partipants.json";
 
 const epochLength = 300
 
@@ -19,7 +20,12 @@ export async function deployApp() {
     const verifier = await verifierF.deploy()
     await verifier.deployed()
     const App = await ethers.getContractFactory('Voteathon')
-    const app = await App.deploy(unirep.address, verifier.address, epochLength)
+    const app = await App.deploy(
+        unirep.address,
+        verifier.address,
+        epochLength,
+        teams.projects.length
+    )
 
     await app.deployed()
 
