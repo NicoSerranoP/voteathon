@@ -51,3 +51,8 @@ in new terminal window, from root:
 ```shell
 yarn frontend start
 ```
+
+
+
+## User flow in a nutshell
+![userflow](https://github.com/NicoSerranoP/voteathon/assets/16527634/69f24f45-455f-4f69-8ed1-c5f5bb87b265)
