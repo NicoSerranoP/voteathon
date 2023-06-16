@@ -5,6 +5,7 @@ import { deployUnirep } from '@unirep/contracts/deploy/index.js'
 import * as hardhat from 'hardhat'
 
 const epochLength = 300
+const numTeams = 7
 
 deployApp().catch((err) => {
     console.log(`Uncaught error: ${err}`)
@@ -18,8 +19,16 @@ export async function deployApp() {
     const verifierF = await ethers.getContractFactory('DataProofVerifier')
     const verifier = await verifierF.deploy()
     await verifier.deployed()
+    const nftF = await ethers.getContractFactory('VoteathonNFT')
+    const nft = await nftF.deploy()
     const App = await ethers.getContractFactory('Voteathon')
-    const app = await App.deploy(unirep.address, verifier.address, epochLength)
+    const app = await App.deploy(
+        unirep.address,
+        verifier.address,
+        nft.address,
+        epochLength,
+        numTeams
+    )
 
     await app.deployed()
 

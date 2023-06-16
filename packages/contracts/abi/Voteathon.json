@@ -12,6 +12,11 @@
                 "type": "address"
             },
             {
+                "internalType": "contract VoteathonNFT",
+                "name": "_nft",
+                "type": "address"
+            },
+            {
                 "internalType": "uint48",
                 "name": "_epochLength",
                 "type": "uint48"
@@ -23,6 +28,11 @@
     },
     {
         "inputs": [
+            {
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
+            },
             {
                 "internalType": "uint256[5]",
                 "name": "publicSignals",
@@ -60,6 +70,19 @@
         "name": "joinProject",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nft",
+        "outputs": [
+            {
+                "internalType": "contract VoteathonNFT",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {

@@ -35,9 +35,10 @@ describe('Voteathon', function () {
     this.timeout(0)
     let unirep
     let voteathon
+    let nft
     const numTeams = 6
-    const numVoters = 6
-    const numHackers = 7
+    const numVoters = 1
+    const numHackers = 2
 
     // epoch length
     const epochLength = 300
@@ -55,6 +56,9 @@ describe('Voteathon', function () {
 
     it('deployment', async function () {
         const [deployer] = await ethers.getSigners()
+        const nftF = await ethers.getContractFactory('VoteathonNFT')
+        nft = await nftF.deploy()
+        await nft.deployed()
         unirep = await deployUnirep(deployer)
         const verifierF = await ethers.getContractFactory('DataProofVerifier')
         const verifier = await verifierF.deploy()
@@ -63,6 +67,7 @@ describe('Voteathon', function () {
         voteathon = await VoteathonF.deploy(
             unirep.address,
             verifier.address,
+            nft.address,
             epochLength,
             numTeams
         )
@@ -191,9 +196,20 @@ describe('Voteathon', function () {
                 circuitInputs
             )
             const dataProof = new DataProof(p.publicSignals, p.proof, prover)
+            const accounts = await ethers.getSigners()
+            expect(
+                (await nft.balanceOf(accounts[i + 1].address)).toString()
+            ).equal('0')
             await voteathon
-                .claimPrize(dataProof.publicSignals, dataProof.proof)
+                .claimPrize(
+                    accounts[i + 1].address,
+                    dataProof.publicSignals,
+                    dataProof.proof
+                )
                 .then((t) => t.wait())
+            expect(
+                (await nft.balanceOf(accounts[i + 1].address)).toString()
+            ).equal('1')
             userState.sync.stop()
         }
     })

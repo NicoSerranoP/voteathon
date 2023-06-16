@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 import {Unirep} from '@unirep/contracts/Unirep.sol';
+import {VoteathonNFT} from './VoteathonNFT.sol';
 
 // Uncomment this line to use console.log
 // import 'hardhat/console.sol';
@@ -22,6 +23,7 @@ enum Emoji {
 contract Voteathon {
     Unirep public unirep;
     IVerifier internal dataVerifier;
+    VoteathonNFT public nft;
 
     mapping(uint256 => uint256[]) participants;
     mapping(uint256 => uint256) voted;
@@ -33,6 +35,7 @@ contract Voteathon {
     constructor(
         Unirep _unirep,
         IVerifier _dataVerifier,
+        VoteathonNFT _nft,
         uint48 _epochLength,
         uint8 _numTeams
     ) {
@@ -41,6 +44,9 @@ contract Voteathon {
 
         // set verifier address
         dataVerifier = _dataVerifier;
+
+        // set nft address
+        nft = _nft;
 
         // sign up as an attester
         unirep.attesterSignUp(_epochLength);
@@ -106,7 +112,7 @@ contract Voteathon {
     }
 
     function claimPrize(
-        // address receiver,
+        address receiver,
         uint256[5] calldata publicSignals,
         uint256[8] calldata proof
     ) public {
@@ -126,7 +132,8 @@ contract Voteathon {
             _findWinner();
         }
         if (score >= winnerScore) {
-            // TODO: mint NFT
+            // TODO: fix uri
+            nft.awardItem(receiver, "test");
         }
     }
 
