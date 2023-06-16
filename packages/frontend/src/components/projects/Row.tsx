@@ -7,7 +7,7 @@ type Props = {
 
 const Row = ({ index }: Props) => {
     return (
-        <div id={'project-row' + index}>
+        <div>
             <h3>Project Name {index}</h3>
             <VoteSection />
         </div>
