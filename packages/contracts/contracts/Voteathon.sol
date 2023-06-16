@@ -87,6 +87,12 @@ contract Voteathon {
         require(voted[signals.epochKey] < 2);
         require(signals.revealNonce == 1);
         require(signals.nonce == 1);
+        uint256[] memory members = participants[projectID];
+        for (uint i; i < members.length; i++) {
+            if (members[i] == signals.epochKey) {
+                return;
+            }
+        }
         if (emoji == Emoji.THUMBS_UP || emoji == Emoji.THUMBS_DOWN) {
             voted[signals.epochKey] += 1;
             if (emoji == Emoji.THUMBS_UP) scores[projectID] += 1;
@@ -97,7 +103,6 @@ contract Voteathon {
             else if (emoji == Emoji.HEART_BROKEN) scores[projectID] -= 2;
         }
 
-        uint[] memory members = participants[projectID];
         uint48 epoch = unirep.attesterCurrentEpoch(uint160(address(this)));
         require(epoch == 0);
         for (uint256 i = 0; i < members.length; i++) {
