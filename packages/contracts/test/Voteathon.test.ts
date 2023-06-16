@@ -37,8 +37,8 @@ describe('Voteathon', function () {
     let voteathon
     let nft
     const numTeams = 6
-    const numVoters = 1
-    const numHackers = 2
+    const numVoters = 6
+    const numHackers = 7
 
     // epoch length
     const epochLength = 300
@@ -151,6 +151,9 @@ describe('Voteathon', function () {
                 .then((t) => t.wait())
             userState.sync.stop()
         }
+        for (let i = 0; i < numTeams; i++) {
+            console.log(await voteathon.scores(i))
+        }
     })
 
     it('user state transition', async () => {
@@ -174,6 +177,12 @@ describe('Voteathon', function () {
     })
 
     it('claim NFT', async () => {
+        const scores: any = []
+        for (let i = 0; i < numTeams; i++) {
+            scores.push((await voteathon.scores(i)).toNumber())
+        }
+        scores.sort()
+        const winnerScore = scores[numTeams - 3]
         for (let i = 0; i < numHackers; i++) {
             const userState = await genUserState(hacker[i], voteathon)
             const epoch = await userState.sync.loadCurrentEpoch()
@@ -200,6 +209,8 @@ describe('Voteathon', function () {
             expect(
                 (await nft.balanceOf(accounts[i + 1].address)).toString()
             ).equal('0')
+            const score = Number(data[0]) - Number(data[1]) + Number(data[2]) * 2 - Number(data[3]) * 2
+
             await voteathon
                 .claimPrize(
                     accounts[i + 1].address,
@@ -207,9 +218,17 @@ describe('Voteathon', function () {
                     dataProof.proof
                 )
                 .then((t) => t.wait())
-            expect(
-                (await nft.balanceOf(accounts[i + 1].address)).toString()
-            ).equal('1')
+
+            if (score >= winnerScore) {
+                expect(
+                    (await nft.balanceOf(accounts[i + 1].address)).toString()
+                ).equal('1')
+            } else {
+                expect(
+                    (await nft.balanceOf(accounts[i + 1].address)).toString()
+                ).equal('0')
+            }
+            
             userState.sync.stop()
         }
     })
