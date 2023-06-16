@@ -34,7 +34,7 @@
                 "type": "uint256[8]"
             }
         ],
-        "name": "claim",
+        "name": "claimPrize",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

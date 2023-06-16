@@ -36,8 +36,8 @@ describe('Voteathon', function () {
     let unirep
     let voteathon
     const numTeams = 6
-    const numVoters = 1
-    const numHackers = 3
+    const numVoters = 6
+    const numHackers = 7
 
     // epoch length
     const epochLength = 300
