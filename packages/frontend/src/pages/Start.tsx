@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import './start.css'
 import Tooltip from '../components/Tooltip'
@@ -7,19 +7,23 @@ import Button from '../components/Button'
 
 import User from '../contexts/User'
 
+const DEFAULT_CLAIM_CODE = "FILL-ME"
+const CLAIM_CODE_REGEX = /^\w+-\w+/
+
 export default observer(() => {
     const userContext = React.useContext(User)
-    const [claimCode, setClaimCode] = useState('TEST-TEST')
+    const { claimCode: claimCodeParam } = useParams()
+    const [claimCode, setClaimCode] = useState(claimCodeParam ?? '')
     const [claimCodeError, setClaimCodeError] = useState(true)
 
     const handleClaimCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const regex = /^\w+-\w+/
-        setClaimCode(event.target.value)
-        if (regex.test(event.target.value) && event.target.value != "TEST-TEST") {
-            setClaimCodeError(false)
-        } else {
-            setClaimCodeError(true)
-        }
+        const claimCode = event.target.value
+        setClaimCode(claimCode)
+
+        const isClaimCodeValid =
+            CLAIM_CODE_REGEX.test(claimCode) &&
+            claimCode != DEFAULT_CLAIM_CODE
+        setClaimCodeError(!isClaimCodeValid)
     }
 
     // if (!userContext.userState) {
@@ -57,7 +61,13 @@ export default observer(() => {
                         <>
                             <div>
                                 <label htmlFor="claimCode">Claim Code:</label>
-                                <input type="text" id="claimCode" value={claimCode} onChange={handleClaimCodeChange} />
+                                <input
+                                    type="text"
+                                    id="claimCode"
+                                    value={claimCode}
+                                    onChange={handleClaimCodeChange}
+                                    placeholder={DEFAULT_CLAIM_CODE}
+                                />
                                 {claimCodeError && <div className="error">Claim code should be in the format of WORD-WORD</div>}
                             </div>
                             <Button
