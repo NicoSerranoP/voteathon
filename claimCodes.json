@@ -1,96 +1,36 @@
 {
-  "0": {
-    "claimCodes": [
-      {
-        "code": "write-unfold",
-        "used": false
-      },
-      {
-        "code": "broccoli-drink",
-        "used": false
-      },
-      {
-        "code": "degree-swim",
-        "used": false
-      },
-      {
-        "code": "roast-motion",
-        "used": false
-      },
-      {
-        "code": "remind-illness",
-        "used": false
-      },
-      {
-        "code": "acid-mammal",
-        "used": false
-      },
-      {
-        "code": "erosion-inside",
-        "used": false
-      },
-      {
-        "code": "code-glare",
-        "used": false
-      },
-      {
-        "code": "old-roast",
-        "used": false
-      },
-      {
-        "code": "since-boss",
-        "used": false
-      }
-    ],
-    "projectID": 0,
-    "generationTime": 1686793925347,
-    "name": "test"
-  },
-  "9999": {
-    "claimCodes": [
-      {
-        "code": "head-nurse",
-        "used": false
-      },
-      {
-        "code": "auto-disease",
-        "used": false
-      },
-      {
-        "code": "potato-toss",
-        "used": false
-      },
-      {
-        "code": "correct-reason",
-        "used": false
-      },
-      {
-        "code": "walnut-float",
-        "used": false
-      },
-      {
-        "code": "tag-average",
-        "used": false
-      },
-      {
-        "code": "rabbit-match",
-        "used": false
-      },
-      {
-        "code": "dirt-bullet",
-        "used": false
-      },
-      {
-        "code": "learn-find",
-        "used": false
-      },
-      {
-        "code": "mimic-hotel",
-        "used": false
-      }
-    ],
-    "projectID": 9999,
-    "generationTime": 1686794259311,
-    "name": "Test Project"
-  }
+    "0": {
+        "claimCodes": [
+            {
+                "code": "jewel-acid",
+                "used": false
+            },
+            {
+                "code": "curious-sleep",
+                "used": false
+            }
+        ],
+        "projectID": 0,
+        "generationTime": 1686947407734,
+        "name": "Test Project 1"
+    },
+    "1": {
+        "claimCodes": [
+            {
+                "code": "buzz-supply",
+                "used": false
+            },
+            {
+                "code": "disease-employ",
+                "used": false
+            },
+            {
+                "code": "boss-canal",
+                "used": false
+            }
+        ],
+        "projectID": 1,
+        "generationTime": 1686947407734,
+        "name": "Test Project 2"
+    }
 }
