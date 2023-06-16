@@ -64,7 +64,9 @@ export default observer(() => {
                                 onClick={async () => {
                                     if (!userContext.userState || claimCodeError) return
                                     const { projectID } = await userContext.signup(claimCode)
-                                    await userContext.joinProject(projectID)
+                                    if (projectID >= 0) {
+                                        await userContext.joinProject(projectID)
+                                    }
                                 }}
                             >
                                 {userContext.userState ? 'Join' : 'Initializing...'}

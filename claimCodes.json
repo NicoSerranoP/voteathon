@@ -2,35 +2,42 @@
     "0": {
         "claimCodes": [
             {
-                "code": "jewel-acid",
-                "used": false
-            },
-            {
-                "code": "curious-sleep",
+                "code": "portion-engine",
                 "used": false
             }
         ],
         "projectID": 0,
-        "generationTime": 1686947407734,
-        "name": "Test Project 1"
+        "generationTime": 1686948463421,
+        "name": "Hack All Da IPs"
     },
     "1": {
         "claimCodes": [
             {
-                "code": "buzz-supply",
+                "code": "lake-govern",
                 "used": false
             },
             {
-                "code": "disease-employ",
-                "used": false
-            },
-            {
-                "code": "boss-canal",
+                "code": "vacant-mom",
                 "used": false
             }
         ],
         "projectID": 1,
-        "generationTime": 1686947407734,
-        "name": "Test Project 2"
+        "generationTime": 1686948463421,
+        "name": "Beaknet"
+    },
+    "-1": {
+        "claimCodes": [
+            {
+                "code": "silly-alter",
+                "used": false
+            },
+            {
+                "code": "easy-lava",
+                "used": false
+            }
+        ],
+        "projectID": -1,
+        "generationTime": 1686948463421,
+        "name": ""
     }
 }
