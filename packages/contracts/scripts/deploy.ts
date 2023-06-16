@@ -3,9 +3,9 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { deployUnirep } from '@unirep/contracts/deploy/index.js'
 import * as hardhat from 'hardhat'
+import teams from "../../../test-projects-partipants.json";
 
 const epochLength = 300
-const numTeams = 7
 
 deployApp().catch((err) => {
     console.log(`Uncaught error: ${err}`)
@@ -27,7 +27,7 @@ export async function deployApp() {
         verifier.address,
         nft.address,
         epochLength,
-        numTeams
+        teams.projects.length
     )
 
     await app.deployed()

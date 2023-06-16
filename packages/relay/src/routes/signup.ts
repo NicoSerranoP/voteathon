@@ -8,7 +8,9 @@ import TransactionManager from '../singletons/TransactionManager'
 import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/Voteathon.sol/Voteathon.json'
 import ClaimCodeManager, {ClaimCodeStatus, ClaimCodeStatusEnum} from '../../../claimCodes/src/index';
 import fs from 'fs';
-const CLAIM_CODE_PATH = '../../../../claimCodes.json'
+import path from 'path';
+
+const CLAIM_CODE_PATH = path.join(__dirname, '../../../../claimCodes.json')
 
 let claimCodes = undefined;
 
@@ -42,7 +44,7 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
             }
             else if (claimCodeStatus.status === ClaimCodeStatusEnum.CLAIMED) {
                 projectID = claimCodeStatus.projectID;
-                fs.writeFileSync(CLAIM_CODE_PATH, JSON.stringify(claimCodeManager.getClaimCodeSets()));
+                fs.writeFileSync(CLAIM_CODE_PATH, JSON.stringify(claimCodeManager.getClaimCodeSets(), null, 4));
                 console.info('CLAIM CODE CLAIMED: ' + claimCode)
             } else {
                 res.status(400).json({ error: 'CLAIM CODE UNKNOWN STATUS' })
