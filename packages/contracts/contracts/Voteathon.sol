@@ -120,24 +120,27 @@ contract Voteathon {
     ) public {
         uint160 attesterId = uint160(address(this));
         require(unirep.attesterCurrentEpoch(attesterId) > 0);
-        verifyDataProof(publicSignals, proof);
+        require(verifyDataProof(publicSignals, proof));
         uint48 epoch = 0; // the voting epoch
         uint256 stateTreeRoot = publicSignals[0];
         unirep.attesterStateTreeRootExists(attesterId, epoch, stateTreeRoot);
-        require(!claimed[publicSignals[1]], "Already claimed");
-        int score = int(publicSignals[2]) * 1  //thumbs up
-                - int(publicSignals[3]) * 1 //thumbs down
-                + int(publicSignals[4]) * 2 //heart
-                - int(publicSignals[5]) * 2; //heart broken
+        require(!claimed[publicSignals[1]], 'Already claimed');
+        int score = int(publicSignals[2]) *
+            1 - //thumbs up
+            int(publicSignals[3]) *
+            1 + //thumbs down
+            int(publicSignals[4]) *
+            2 - //heart
+            int(publicSignals[5]) *
+            2; //heart broken
 
         if (!foundWinner) {
             _findWinner();
         }
-        if (score >= winnerScore) {
-            // TODO: fix uri
-            nft.awardItem(receiver, "test");
-            claimed[publicSignals[5]] = true;
-        }
+        require(score >= winnerScore, 'Insufficient score');
+        // TODO: fix uri
+        nft.awardItem(receiver, 'test');
+        claimed[publicSignals[1]] = true;
     }
 
     function _findWinner() internal {

@@ -151,9 +151,6 @@ describe('Voteathon', function () {
                 .then((t) => t.wait())
             userState.sync.stop()
         }
-        for (let i = 0; i < numTeams; i++) {
-            console.log(await voteathon.scores(i))
-        }
     })
 
     it('user state transition', async () => {
@@ -191,7 +188,7 @@ describe('Voteathon', function () {
             const stateTreeProof = stateTree.createProof(index)
             const attesterId = voteathon.address
             const data = await userState.getProvableData()
-            
+
             const circuitInputs = stringifyBigInts({
                 identity_secret: hacker[i].secret,
                 state_tree_indexes: stateTreeProof.pathIndices,
@@ -210,26 +207,53 @@ describe('Voteathon', function () {
             expect(
                 (await nft.balanceOf(accounts[i + 1].address)).toString()
             ).equal('0')
-            const score = Number(data[0]) - Number(data[1]) + Number(data[2]) * 2 - Number(data[3]) * 2
-
-            await voteathon
-                .claimPrize(
-                    accounts[i + 1].address,
-                    dataProof.publicSignals,
-                    dataProof.proof
-                )
-                .then((t) => t.wait())
+            const score =
+                Number(data[0]) -
+                Number(data[1]) +
+                Number(data[2]) * 2 -
+                Number(data[3]) * 2
 
             if (score >= winnerScore) {
+                await voteathon
+                    .claimPrize(
+                        accounts[i + 1].address,
+                        dataProof.publicSignals,
+                        dataProof.proof
+                    )
+                    .then((t) => t.wait())
                 expect(
                     (await nft.balanceOf(accounts[i + 1].address)).toString()
                 ).equal('1')
+                // winner cannot claim twice
+                const p2 = await prover.genProofAndPublicSignals(
+                    'dataProof',
+                    circuitInputs
+                )
+                const dataProof2 = new DataProof(
+                    p2.publicSignals,
+                    p2.proof,
+                    prover
+                )
+                await expect(
+                    voteathon.claimPrize(
+                        accounts[i + 2].address,
+                        dataProof2.publicSignals,
+                        dataProof2.proof
+                    )
+                ).to.be.revertedWith('Already claimed')
             } else {
+                await expect(
+                    voteathon.claimPrize(
+                        accounts[i + 1].address,
+                        dataProof.publicSignals,
+                        dataProof.proof
+                    )
+                ).to.be.revertedWith('Insufficient score')
                 expect(
                     (await nft.balanceOf(accounts[i + 1].address)).toString()
                 ).equal('0')
             }
-            
+
             userState.sync.stop()
         }
     })

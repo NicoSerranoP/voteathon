@@ -34,9 +34,9 @@
                 "type": "address"
             },
             {
-                "internalType": "uint256[5]",
+                "internalType": "uint256[6]",
                 "name": "publicSignals",
-                "type": "uint256[5]"
+                "type": "uint256[6]"
             },
             {
                 "internalType": "uint256[8]",
@@ -133,9 +133,9 @@
     {
         "inputs": [
             {
-                "internalType": "uint256[5]",
+                "internalType": "uint256[6]",
                 "name": "publicSignals",
-                "type": "uint256[5]"
+                "type": "uint256[6]"
             },
             {
                 "internalType": "uint256[8]",
