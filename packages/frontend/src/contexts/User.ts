@@ -102,12 +102,12 @@ class User {
 
     async joinProject(
         projectID: number,
-        epkNonce: number
     ) {
         if (!this.userState) throw new Error('user state not initialized')
 
         const epochKeyProof = await this.userState.genEpochKeyProof({
-            nonce: epkNonce,
+            nonce: 0,
+            revealNonce: true,
         })
         const data = await fetch(`${SERVER}/api/project/join`, {
             method: 'POST',
@@ -130,12 +130,12 @@ class User {
     async vote(
         projectID: number,
         emoji: number,
-        epkNonce: number
     ) {
         if (!this.userState) throw new Error('user state not initialized')
 
         const epochKeyProof = await this.userState.genEpochKeyProof({
-            nonce: epkNonce,
+            nonce: 1,
+            revealNonce: true,
         })
         const data = await fetch(`${SERVER}/api/vote`, {
             method: 'POST',

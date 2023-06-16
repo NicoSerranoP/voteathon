@@ -236,7 +236,6 @@ export default observer(() => {
                                 await userContext.vote(
                                     projectID,
                                     emoji,
-                                    reqInfo.nonce ?? 0
                                 )
                                 setProjectID(0);
                                 setEmoji(0);
