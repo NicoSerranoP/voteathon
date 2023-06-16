@@ -3,3 +3,4 @@ packages/claimCodes/dist
 
 .DS_Store
 config.ts
+projects-participants.json

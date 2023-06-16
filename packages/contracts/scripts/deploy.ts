@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { deployUnirep } from '@unirep/contracts/deploy/index.js'
 import * as hardhat from 'hardhat'
-import teams from "../../../test-projects-partipants.json";
+import teams from "../../../projects-partipants.json";
 
 const epochLength = 300
 
