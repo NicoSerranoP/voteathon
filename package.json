@@ -9,6 +9,7 @@
     ],
     "scripts": {
         "install": "lerna bootstrap",
+        "postinstall": "sh scripts/installUnirep.sh",
         "build": "lerna run build",
         "circuits": "yarn workspace @unirep-app/circuits run",
         "contracts": "yarn workspace @unirep-app/contracts run",
