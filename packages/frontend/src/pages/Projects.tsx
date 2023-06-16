@@ -10,7 +10,7 @@ const Projects = () => {
             <Header />
             <TopDescription />
             {projects.map((project, i) => (
-                <Row index={i} project={project}></Row>
+                <Row key={'project-' + i} index={i} project={project}></Row>
             ))}
         </div>
     )
