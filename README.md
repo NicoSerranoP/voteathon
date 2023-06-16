@@ -11,6 +11,11 @@ voteathon is the app that transforms the voting process into a super cool, ultra
 
 Our secret sauce? The cutting-edge UniRep protocol! No, it's not a spell from a fantasy novel, but it's just as magical. It ensures complete anonymity while maintaining the highest level of security. Your vote counts, but your identity remains hidden – giving you the freedom to cast your vote in total privacy.
 
+
+### If you are seasonal hacker who go one hackathon to the other, this is great for you! Because you could earn reputations along all the hackathon you have won!
+----------------------------
+Build your own and get started.
+
 # Start the app locally
 
 ### 1 Build the files
