@@ -1,5 +1,8 @@
 body {
     /* font-family: sans-serif, helvetica; */
+    margin: 0px;
+    color: #fafbfc;
+    background: #282a2d;
     font-family: 'Azeret Mono';
     font-weight: 200;
 }
