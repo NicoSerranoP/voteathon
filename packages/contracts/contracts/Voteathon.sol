@@ -8,7 +8,7 @@ import {VoteathonNFT} from './VoteathonNFT.sol';
 
 interface IVerifier {
     function verifyProof(
-        uint256[5] calldata publicSignals,
+        uint256[6] calldata publicSignals,
         uint256[8] calldata proof
     ) external view returns (bool);
 }
@@ -27,6 +27,8 @@ contract Voteathon {
 
     mapping(uint256 => uint256[]) participants;
     mapping(uint256 => uint256) voted;
+    mapping(uint256 => bool) claimed;
+
     int[] public scores;
     uint public immutable numTeams;
     int public winnerScore;
@@ -113,7 +115,7 @@ contract Voteathon {
 
     function claimPrize(
         address receiver,
-        uint256[5] calldata publicSignals,
+        uint256[6] calldata publicSignals,
         uint256[8] calldata proof
     ) public {
         uint160 attesterId = uint160(address(this));
@@ -122,11 +124,11 @@ contract Voteathon {
         uint48 epoch = 0; // the voting epoch
         uint256 stateTreeRoot = publicSignals[0];
         unirep.attesterStateTreeRootExists(attesterId, epoch, stateTreeRoot);
-
-        int score = int(publicSignals[1]) * 1  //thumbs up
-                - int(publicSignals[2]) * 1 //thumbs down
-                + int(publicSignals[3]) * 2 //heart
-                - int(publicSignals[4]) * 2; //heart broken
+        require(!claimed[publicSignals[1]], "Already claimed");
+        int score = int(publicSignals[2]) * 1  //thumbs up
+                - int(publicSignals[3]) * 1 //thumbs down
+                + int(publicSignals[4]) * 2 //heart
+                - int(publicSignals[5]) * 2; //heart broken
 
         if (!foundWinner) {
             _findWinner();
@@ -134,6 +136,7 @@ contract Voteathon {
         if (score >= winnerScore) {
             // TODO: fix uri
             nft.awardItem(receiver, "test");
+            claimed[publicSignals[5]] = true;
         }
     }
 
@@ -159,7 +162,7 @@ contract Voteathon {
     }
 
     function verifyDataProof(
-        uint256[5] calldata publicSignals,
+        uint256[6] calldata publicSignals,
         uint256[8] calldata proof
     ) public view returns (bool) {
         return dataVerifier.verifyProof(publicSignals, proof);

@@ -191,6 +191,7 @@ describe('Voteathon', function () {
             const stateTreeProof = stateTree.createProof(index)
             const attesterId = voteathon.address
             const data = await userState.getProvableData()
+            
             const circuitInputs = stringifyBigInts({
                 identity_secret: hacker[i].secret,
                 state_tree_indexes: stateTreeProof.pathIndices,

@@ -1,12 +1,12 @@
 {
     "projects": [
         {
-            "id": 0,    
-            "name": "Test Project 1",
-            "description": "Hack the planet",
-            "challenge": "Will it blend?",
-            "deliverables": "Stuxnet executable",
-            "repoUrl": "https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
+            "id": -1,
+            "name": "",
+            "description": "",
+            "challenge": "",
+            "deliverables": "",
+            "repoUrl": "",
             "members": [
                 {
                     "participantId": 0
@@ -15,18 +15,28 @@
                     "participantId": 1
                 }
             ]
+        },        
+        {
+            "id": 0,    
+            "name": "Hack All Da IPs",
+            "description": "Hack the planet",
+            "challenge": "Will it blend?",
+            "deliverables": "Stuxnet executable",
+            "repoUrl": "https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
+            "members": [
+                {
+                    "participantId": 2
+                }
+            ]
         },
         {
             "id": 1,    
-            "name": "Test Project 2",
+            "name": "Beaknet",
             "description": "Skynet, but with Furbies",
             "challenge": "What if AI was soft & cute?",
             "deliverables": "Fluffy extinction",
             "repoUrl": "https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
             "members": [
-                {
-                    "participantId": 2
-                },
                 {
                     "participantId": 3
                 },
