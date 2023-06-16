@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import {Unirep} from '@unirep/contracts/Unirep.sol';
 
 // Uncomment this line to use console.log
-// import "hardhat/console.sol";
+// import 'hardhat/console.sol';
 
 interface IVerifier {
     function verifyProof(
@@ -105,7 +105,7 @@ contract Voteathon {
         }
     }
 
-    function claim(
+    function claimPrize(
         // address receiver,
         uint256[5] calldata publicSignals,
         uint256[8] calldata proof
@@ -117,25 +117,24 @@ contract Voteathon {
         uint256 stateTreeRoot = publicSignals[0];
         unirep.attesterStateTreeRootExists(attesterId, epoch, stateTreeRoot);
 
-        int score = 0;
-        score += int(publicSignals[1]) * 1; //thumbs up
-        score -= int(publicSignals[2]) * 1; //thumbs down
-        score += int(publicSignals[3]) * 2; //heart
-        score -= int(publicSignals[4]) * 2; //heart broken
+        int score = int(publicSignals[1]) * 1  //thumbs up
+                - int(publicSignals[2]) * 1 //thumbs down
+                + int(publicSignals[3]) * 2 //heart
+                - int(publicSignals[4]) * 2; //heart broken
 
         if (!foundWinner) {
             _findWinner();
         }
-
         if (score >= winnerScore) {
             // TODO: mint NFT
         }
     }
 
     function _findWinner() internal {
-        int firstHighest = -2 * int(numTeams);
-        int secondHighest = -2 * int(numTeams);
-        int thirdHighest = -2 * int(numTeams);
+        uint count = unirep.attesterMemberCount(uint160(address(this)));
+        int firstHighest = -2 * int(count);
+        int secondHighest = -2 * int(count);
+        int thirdHighest = -2 * int(count);
         for (uint256 i = 0; i < numTeams; i++) {
             if (scores[i] > firstHighest) {
                 thirdHighest = secondHighest;

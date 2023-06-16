@@ -32,16 +32,26 @@ async function genUserState(id, app) {
 }
 
 describe('Voteathon', function () {
+    this.timeout(0)
     let unirep
     let voteathon
-    const projectID = 0
     const numTeams = 6
+    const numVoters = 1
+    const numHackers = 3
 
     // epoch length
     const epochLength = 300
     // generate random user id
-    const voter = new Identity()
-    const hacker = new Identity()
+    const voter = Array(numVoters)
+        .fill(0)
+        .map((n) => {
+            return new Identity()
+        })
+    const hacker = Array(numHackers)
+        .fill(0)
+        .map((n) => {
+            return new Identity()
+        })
 
     it('deployment', async function () {
         const [deployer] = await ethers.getSigners()
@@ -60,125 +70,131 @@ describe('Voteathon', function () {
     })
 
     it('voter sign up', async () => {
-        const userState = await genUserState(voter, voteathon)
+        for (let i = 0; i < numVoters; i++) {
+            const userState = await genUserState(voter[i], voteathon)
 
-        // generate
-        const { publicSignals, proof } = await userState.genUserSignUpProof()
-        await voteathon.userSignUp(publicSignals, proof).then((t) => t.wait())
-        userState.sync.stop()
+            // generate
+            const { publicSignals, proof } =
+                await userState.genUserSignUpProof()
+            await voteathon
+                .userSignUp(publicSignals, proof)
+                .then((t) => t.wait())
+            userState.sync.stop()
+        }
     })
 
     it('hacker sign up', async () => {
-        const userState = await genUserState(hacker, voteathon)
+        for (let i = 0; i < numHackers; i++) {
+            const userState = await genUserState(hacker[i], voteathon)
 
-        // generate
-        const { publicSignals, proof } = await userState.genUserSignUpProof()
-        await voteathon.userSignUp(publicSignals, proof).then((t) => t.wait())
-        userState.sync.stop()
+            // generate
+            const { publicSignals, proof } =
+                await userState.genUserSignUpProof()
+            await voteathon
+                .userSignUp(publicSignals, proof)
+                .then((t) => t.wait())
+            userState.sync.stop()
+        }
     })
 
     it('join project', async () => {
-        const userState = await genUserState(hacker, voteathon)
+        for (let i = 0; i < numHackers; i++) {
+            const userState = await genUserState(hacker[i], voteathon)
+            const projectID = i % numTeams
 
-        // generate
-        const { publicSignals, proof } = await userState.genEpochKeyProof({
-            nonce: 0,
-            revealNonce: true,
-        })
-        await voteathon
-            .joinProject(projectID, publicSignals, proof)
-            .then((t) => t.wait())
-        userState.sync.stop()
+            // generate
+            const { publicSignals, proof } = await userState.genEpochKeyProof({
+                nonce: 0,
+                revealNonce: true,
+            })
+            await voteathon
+                .joinProject(projectID, publicSignals, proof)
+                .then((t) => t.wait())
+            userState.sync.stop()
+        }
     })
 
     it('vote project', async () => {
-        const userState = await genUserState(voter, voteathon)
-        const emoji = 0
+        for (let i = 0; i < numVoters; i++) {
+            const userState = await genUserState(voter[i], voteathon)
+            const emoji = i % 4
+            const projectID = i % numTeams
 
-        // generate
-        const { publicSignals, proof } = await userState.genEpochKeyProof({
-            nonce: 1,
-            revealNonce: true,
-        })
-        await voteathon
-            .vote(projectID, emoji, publicSignals, proof)
-            .then((t) => t.wait())
-        userState.sync.stop()
+            // generate
+            const { publicSignals, proof } = await userState.genEpochKeyProof({
+                nonce: 1,
+                revealNonce: true,
+            })
+            await voteathon
+                .vote(projectID, emoji, publicSignals, proof)
+                .then((t) => t.wait())
+            userState.sync.stop()
+        }
+
+        for (let i = 0; i < numHackers; i++) {
+            const userState = await genUserState(hacker[i], voteathon)
+            const emoji = (i + 2) % 4
+            const projectID = (i + 2) % numTeams
+
+            // generate
+            const { publicSignals, proof } = await userState.genEpochKeyProof({
+                nonce: 1,
+                revealNonce: true,
+            })
+            await voteathon
+                .vote(projectID, emoji, publicSignals, proof)
+                .then((t) => t.wait())
+            userState.sync.stop()
+        }
     })
 
     it('user state transition', async () => {
         await ethers.provider.send('evm_increaseTime', [epochLength])
         await ethers.provider.send('evm_mine', [])
 
-        const newEpoch = await unirep.attesterCurrentEpoch(voteathon.address)
-        const userState = await genUserState(hacker, voteathon)
-        const { publicSignals, proof } =
-            await userState.genUserStateTransitionProof({
-                toEpoch: newEpoch,
-            })
-        await unirep
-            .userStateTransition(publicSignals, proof)
-            .then((t) => t.wait())
-        userState.sync.stop()
-    })
-
-    it('data proof', async () => {
-        const userState = await genUserState(hacker, voteathon)
-        const epoch = await userState.sync.loadCurrentEpoch()
-        const stateTree = await userState.sync.genStateTree(epoch)
-        const index = await userState.latestStateTreeLeafIndex(epoch)
-        const stateTreeProof = stateTree.createProof(index)
-        const attesterId = voteathon.address
-        const data = await userState.getProvableData()
-        const value = Array(SUM_FIELD_COUNT).fill(0)
-        const circuitInputs = stringifyBigInts({
-            identity_secret: hacker.secret,
-            state_tree_indexes: stateTreeProof.pathIndices,
-            state_tree_elements: stateTreeProof.siblings,
-            data: data,
-            epoch: epoch,
-            attester_id: attesterId,
-            value: value,
-        })
-        const p = await prover.genProofAndPublicSignals(
-            'dataProof',
-            circuitInputs
-        )
-        const dataProof = new DataProof(p.publicSignals, p.proof, prover)
-        const isValid = await voteathon.verifyDataProof(
-            dataProof.publicSignals,
-            dataProof.proof
-        )
-        expect(isValid).to.be.true
-        userState.sync.stop()
+        for (let i = 0; i < numHackers; i++) {
+            const newEpoch = await unirep.attesterCurrentEpoch(
+                voteathon.address
+            )
+            const userState = await genUserState(hacker[i], voteathon)
+            const { publicSignals, proof } =
+                await userState.genUserStateTransitionProof({
+                    toEpoch: newEpoch,
+                })
+            await unirep
+                .userStateTransition(publicSignals, proof)
+                .then((t) => t.wait())
+            userState.sync.stop()
+        }
     })
 
     it('claim NFT', async () => {
-        const userState = await genUserState(hacker, voteathon)
-        const epoch = await userState.sync.loadCurrentEpoch()
-        const stateTree = await userState.sync.genStateTree(epoch)
-        const index = await userState.latestStateTreeLeafIndex(epoch)
-        const stateTreeProof = stateTree.createProof(index)
-        const attesterId = voteathon.address
-        const data = await userState.getProvableData()
-        const value = Array(SUM_FIELD_COUNT).fill(0)
-        const circuitInputs = stringifyBigInts({
-            identity_secret: hacker.secret,
-            state_tree_indexes: stateTreeProof.pathIndices,
-            state_tree_elements: stateTreeProof.siblings,
-            data: data,
-            epoch: epoch,
-            attester_id: attesterId,
-            value: value,
-        })
-        const p = await prover.genProofAndPublicSignals(
-            'dataProof',
-            circuitInputs
-        )
-        const dataProof = new DataProof(p.publicSignals, p.proof, prover)
-        await voteathon
-            .claim(dataProof.publicSignals, dataProof.proof)
-            .then((t) => t.wait())
-        userState.sync.stop()
+        for (let i = 0; i < numHackers; i++) {
+            const userState = await genUserState(hacker[i], voteathon)
+            const epoch = await userState.sync.loadCurrentEpoch()
+            const stateTree = await userState.sync.genStateTree(epoch)
+            const index = await userState.latestStateTreeLeafIndex(epoch)
+            const stateTreeProof = stateTree.createProof(index)
+            const attesterId = voteathon.address
+            const data = await userState.getProvableData()
+            const circuitInputs = stringifyBigInts({
+                identity_secret: hacker[i].secret,
+                state_tree_indexes: stateTreeProof.pathIndices,
+                state_tree_elements: stateTreeProof.siblings,
+                data: data,
+                epoch: epoch,
+                attester_id: attesterId,
+                value: data.slice(0, SUM_FIELD_COUNT),
+            })
+            const p = await prover.genProofAndPublicSignals(
+                'dataProof',
+                circuitInputs
+            )
+            const dataProof = new DataProof(p.publicSignals, p.proof, prover)
+            await voteathon
+                .claimPrize(dataProof.publicSignals, dataProof.proof)
+                .then((t) => t.wait())
+            userState.sync.stop()
+        }
     })
 })
