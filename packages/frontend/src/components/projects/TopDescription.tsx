@@ -21,24 +21,22 @@ const TopDescription = () => {
     return (
         <Container>
             <Title>{isVotingTime ? 'Projects' : 'Voting result'}</Title>
-            <BlockText>
-                <Description>
-                    {isVotingTime
-                        ? `Total of ${numberOfProjects} projects. Only 1 vote per person and you can’t vote on your project.`
-                        : `${numberOfVoters} people voted.`}
-                </Description>
-                <Highlight>
-                    {isVotingTime
-                        ? `Voting ends: hh:mm:ss`
-                        : `Voting starts at: ${startMonth} ${startDay}, ${startHour}. Close at: ${endMonth} ${endDay}, ${endHour}.`}
-                </Highlight>
-                <BlockDescription>
-                    {isVotingTime
-                        ? 'Voting started. LFG'
-                        : isResultTime &&
-                          'You already voted. Let’s wait for results.'}
-                </BlockDescription>
-            </BlockText>
+            <Description>
+                {isVotingTime
+                    ? `Total of ${numberOfProjects} projects. Only 1 vote per person and you can’t vote on your project.`
+                    : `${numberOfVoters} people voted.`}
+            </Description>
+            <Highlight>
+                {isVotingTime
+                    ? `Voting ends: hh:mm:ss`
+                    : `Voting starts at: ${startMonth} ${startDay}, ${startHour}. Close at: ${endMonth} ${endDay}, ${endHour}.`}
+            </Highlight>
+            <BlockDescription>
+                {isVotingTime
+                    ? 'Voting started. LFG'
+                    : isResultTime &&
+                      'You already voted. Let’s wait for results.'}
+            </BlockDescription>
         </Container>
     )
 }
@@ -48,13 +46,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-`
-
-const BlockText = styled.div`
-    max-width: 70%;
     text-align: center;
-    display: flex;
-    flex-direction: column;
     gap: 6px;
 `
 

@@ -1,3 +1,4 @@
+import { styled } from 'styled-components'
 import Header from '../components/Header'
 import Row from '../components/projects/Row'
 import TopDescription from '../components/projects/TopDescription'
@@ -8,12 +9,19 @@ const Projects = () => {
     return (
         <div>
             <Header />
-            <TopDescription />
-            {projects.map((project, i) => (
-                <Row key={'project-' + i} index={i} project={project}></Row>
-            ))}
+            <Container>
+                <TopDescription />
+                {projects.map((project, i) => (
+                    <Row key={'project-' + i} index={i} project={project}></Row>
+                ))}
+            </Container>
         </div>
     )
 }
+
+const Container = styled.div`
+    max-width: 70%;
+    margin: auto;
+`
 
 export default Projects
