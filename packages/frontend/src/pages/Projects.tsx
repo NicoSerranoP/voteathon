@@ -4,7 +4,40 @@ import Row from '../components/projects/Row'
 import TopDescription from '../components/projects/TopDescription'
 
 const Projects = () => {
-    const projects = [1, 2, 3, 4, 5]
+    // TODO: read from contract directly
+    const projects = [
+        {
+            id: 0,
+            name: 'Hack All Da IPs',
+            description: 'Hack the planet',
+            challenge: 'Will it blend?',
+            deliverables: 'Stuxnet executable',
+            repoUrl:
+                'https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition',
+            members: [
+                {
+                    participantId: 2,
+                },
+            ],
+        },
+        {
+            id: 1,
+            name: 'Beaknet',
+            description: 'Skynet, but with Furbies',
+            challenge: 'What if AI was soft & cute?',
+            deliverables: 'Fluffy extinction',
+            repoUrl:
+                'https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+            members: [
+                {
+                    participantId: 3,
+                },
+                {
+                    participantId: 4,
+                },
+            ],
+        },
+    ]
 
     return (
         <div>
