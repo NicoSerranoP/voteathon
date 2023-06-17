@@ -165,7 +165,7 @@ class User {
         await this.loadData()
     }
 
-    async claimPrize() {
+    async claimPrize(address: string) {
         if (!this.userState) throw new Error('user state not initialized')
 
         const userData = await this.userState.getProvableData()
@@ -180,7 +180,7 @@ class User {
             data: userData,
             epoch: epoch,
             attester_id: this.userState.sync.attesterId,
-            value: userData.slice(0, this.userState.sync.settings.sumFieldCount),
+            value: userData.slice(0, this.sumFieldCount),
         })
         const p = await prover.genProofAndPublicSignals(
             'dataProof',
@@ -194,6 +194,7 @@ class User {
             },
             body: JSON.stringify(
                 stringifyBigInts({
+                    address,
                     publicSignals,
                     proof,
                 })
@@ -208,15 +209,15 @@ class User {
         if (!this.userState) throw new Error('user state not initialized')
 
         await this.userState.waitForSync()
-        const signupProof = await this.userState.genUserStateTransitionProof()
+        const ustProof = await this.userState.genUserStateTransitionProof()
         const data = await fetch(`${SERVER}/api/transition`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                publicSignals: signupProof.publicSignals,
-                proof: signupProof.proof,
+                publicSignals: ustProof.publicSignals,
+                proof: ustProof.proof,
             }),
         }).then((r) => r.json())
         await this.provider.waitForTransaction(data.hash)

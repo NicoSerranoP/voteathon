@@ -10,7 +10,7 @@ import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/Voteathon.sol/
 export default (app: Express, _db: DB, synchronizer: Synchronizer) => {
     app.post('/api/prize/claim', async (req, res) => {
         try {
-            const { publicSignals, proof } = req.body
+            const { address, publicSignals, proof } = req.body
 
             const epochKeyProof = new DataProof(
                 publicSignals,
@@ -26,7 +26,7 @@ export default (app: Express, _db: DB, synchronizer: Synchronizer) => {
 
             const calldata = appContract.interface.encodeFunctionData(
                 'claimPrize',
-                [publicSignals, proof]
+                [address, publicSignals, proof]
             )
 
             const hash = await TransactionManager.queueTransaction(
