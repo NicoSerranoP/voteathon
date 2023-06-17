@@ -5,3 +5,7 @@ zksnarkBuild/*
 !*/dataProof.wasm
 !*/dataProof.zkey
 !*/dataProof_main.circom
+!*/projectProof.vkey.json
+!*/projectProof.wasm
+!*/projectProof.zkey
+!*/projectProof_main.circom

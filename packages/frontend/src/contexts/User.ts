@@ -3,10 +3,11 @@ import { makeAutoObservable } from 'mobx'
 import { stringifyBigInts } from '@unirep/utils'
 import { Identity } from '@semaphore-protocol/identity'
 import { UserState } from '@unirep/core'
-import { DataProof } from '@unirep-app/circuits'
+import { DataProof, ProjectProof } from '@unirep-app/circuits'
 import { SERVER } from '../config'
 import prover from './prover'
-import { ethers } from 'ethers'
+import { BigNumberish, ethers } from 'ethers'
+import UnirepApp from '@unirep-app/contracts/abi/UnirepApp.json'
 
 class User {
     currentEpoch: number = 0
@@ -138,6 +139,7 @@ class User {
         this.projectID = projectID
     }
 
+    
     async vote(
         projectID: number,
         emoji: number,
@@ -145,11 +147,51 @@ class User {
         if (!this.userState) throw new Error('user state not initialized')
         if (projectID === this.projectID) throw new Error('you cannot vote your project')
 
-        const epochKeyProof = await this.userState.genEpochKeyProof({
+        // const epochKeyProof = await this.userState.genEpochKeyProof({
+        //     nonce: 1,
+        //     revealNonce: true,
+        // })
+        const voteathon = new ethers.Contract(
+            this.userState.sync.attesterId.toString(),
+            UnirepApp,
+            this.provider
+        )
+
+        const count = 10;
+        const epoch_keys = new Array();
+        for (let j = 0; j < count; j++) {
+            const epoch_key = await voteathon.participants(projectID,j);
+            epoch_keys.push(epoch_key);
+        }
+        const padded_epoch_keys = padZeros(epoch_keys, 10);
+
+        const nonce = 1
+        const attesterId = voteathon.address
+        const epoch = 0
+        const tree = await this.userState.sync.genStateTree(epoch, attesterId)
+        const leafIndex = await this.userState.latestStateTreeLeafIndex(epoch, attesterId)
+        const data = await this.userState.getData(epoch - 1, attesterId)
+        const proof = tree.createProof(leafIndex)
+
+        const circuitInputs = stringifyBigInts({
+            identity_secret: this.userState.id.secret,
+            data,
+            sig_data: 0,
+            state_tree_elements: proof.siblings,
+            state_tree_indexes: proof.pathIndices,
+            epoch,
             nonce: 1,
-            revealNonce: true,
+            attester_id: attesterId,
+            reveal_nonce: 1,
+            project_epoch_keys: padded_epoch_keys,
         })
-        const data = await fetch(`${SERVER}/api/vote`, {
+        const p = await prover.genProofAndPublicSignals(
+            'projectProof',
+            circuitInputs
+        )
+        const projectProof = new ProjectProof(p.publicSignals, p.proof, prover)
+          
+        const data1 = await fetch(`${SERVER}/api/vote`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -158,12 +200,12 @@ class User {
                 stringifyBigInts({
                     projectID,
                     emoji,
-                    publicSignals: epochKeyProof.publicSignals,
-                    proof: epochKeyProof.proof,
+                    publicSignals: projectProof.publicSignals,
+                    proof: projectProof.proof,
                 })
             ),
         }).then((r) => r.json())
-        await this.provider.waitForTransaction(data.hash)
+        await this.provider.waitForTransaction(data1.hash)
         await this.userState.waitForSync()
         await this.loadData()
     }
@@ -267,3 +309,10 @@ class User {
 }
 
 export default createContext(new User())
+
+function padZeros(value: BigNumberish[], length: number): BigNumberish[] {
+    while (value.length < length) {
+      value.push(0);
+    }
+    return value;
+  }
