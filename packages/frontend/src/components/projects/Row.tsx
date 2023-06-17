@@ -9,7 +9,10 @@ type Props = {
 const Row = ({ index }: Props) => {
     return (
         <Container>
-            <h3>Project Name {index}</h3>
+            <LeftContainer>
+                <h3>Project Name {index}</h3>
+                <p>Here goes the project description</p>
+            </LeftContainer>
             <VoteSection />
         </Container>
     )
@@ -17,10 +20,18 @@ const Row = ({ index }: Props) => {
 
 const Container = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     border: 3px solid #fff294;
+    min-height: 190px;
     margin-block: 15px;
     gap: 12px;
+`
+
+const LeftContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 10px;
 `
 
 export default Row
