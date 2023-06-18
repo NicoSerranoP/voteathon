@@ -1,6 +1,8 @@
+import React, { useState } from 'react'
 import Modal from 'react-modal'
 import { styled } from 'styled-components'
 import VoteathonIconBlack from '../../assets/logo-black.svg'
+import User from '../../contexts/User'
 
 type Props = {
     open: boolean
@@ -10,6 +12,23 @@ type Props = {
 }
 
 const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
+    const userContext = React.useContext(User)
+
+    const [voting, setVoting] = useState(false);
+
+    const handleVoteClick = async () => {
+        setVoting(true);
+        try {
+            const thumbsUpEmoji = 0
+            await userContext.vote(projectId, thumbsUpEmoji)
+            localStorage.setItem('alreadyVoted', "true")
+        } catch (err) {
+            console.error(err)
+        } finally {
+            setVoting(false)
+        }
+    };
+
     return (
         <StyledModal
             isOpen={open}
@@ -30,7 +49,7 @@ const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
                 style={{ margin: 'auto' }}
             />
             <h2 style={{ marginBottom: '5px' }}>
-                Are you sure to vote on this project?
+                {voting ? 'Submitting vote...' : 'Are you sure to vote on this project?'}
             </h2>
             <p style={{ marginBottom: '15px' }}>
                 {projectName} - id: {projectId}
@@ -42,8 +61,8 @@ const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
                     gap: '20px',
                 }}
             >
-                <Button>Yes</Button>
-                <Button>No</Button>
+                <Button disabled={voting} onClick={handleVoteClick}>Yes</Button>
+                <Button disabled={voting} onClick={onDeselect}>No</Button>
             </div>
         </StyledModal>
     )
