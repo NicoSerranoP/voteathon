@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import User from '../../contexts/User'
+import { useEffect, useState, useContext } from 'react'
 import { styled } from 'styled-components'
 import VoteathonIconBlack from '../../assets/logo-black.svg'
 import PathCheckIcon from '../../assets/path-check.svg'
@@ -10,7 +11,9 @@ type Props = {
 }
 
 const VoteSection = ({ projectId, projectName }: Props) => {
+    const userContext = useContext(User)
     const [alreadyVoted, setAlreadyVoted] = useState(true)
+    const [isResultTime, setIsResultTime] = useState(false)
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
@@ -22,33 +25,55 @@ const VoteSection = ({ projectId, projectName }: Props) => {
         }
     }, [])
 
+    useEffect(() => {
+        const seconds =
+            userContext.userState?.sync.calcEpochRemainingTime() || 0
+        if (seconds <= 0) {
+            setIsResultTime(true)
+        }
+    }, [userContext])
+
     const handleVoteClick = () => {
         setOpen(true)
     }
 
     return (
         <>
-            {alreadyVoted ? (
-                <Container
-                    style={{
-                        background: 'transparent',
-                        textAlign: 'center',
-                    }}
-                >
-                    <img src={PathCheckIcon} width={'20px'} />
-                    <p style={{ lineHeight: '15px' }}>You already voted.</p>
-                </Container>
+            {isResultTime ? (
+                <>
+                    <Container style={{ color: '#151616', fontWeight: '800' }}>
+                        # votes
+                    </Container>
+                </>
             ) : (
-                <Container>
-                    <img src={VoteathonIconBlack} width={'90px'} />
-                    <Button onClick={handleVoteClick}>Vote for me</Button>
-                    <VotingModal
-                        open={open}
-                        projectId={projectId}
-                        projectName={projectName}
-                        onDeselect={() => setOpen(false)}
-                    />
-                </Container>
+                <>
+                    {alreadyVoted ? (
+                        <Container
+                            style={{
+                                background: 'transparent',
+                                textAlign: 'center',
+                            }}
+                        >
+                            <img src={PathCheckIcon} width={'20px'} />
+                            <p style={{ lineHeight: '15px' }}>
+                                You already voted.
+                            </p>
+                        </Container>
+                    ) : (
+                        <Container>
+                            <img src={VoteathonIconBlack} width={'90px'} />
+                            <Button onClick={handleVoteClick}>
+                                Vote for me
+                            </Button>
+                            <VotingModal
+                                open={open}
+                                projectId={projectId}
+                                projectName={projectName}
+                                onDeselect={() => setOpen(false)}
+                            />
+                        </Container>
+                    )}
+                </>
             )}
         </>
     )

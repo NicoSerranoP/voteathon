@@ -43,6 +43,9 @@ const TopDescription = () => {
             if (numberOfVoters > 0) {
                 setIsResultTime(true)
             }
+            if (seconds <= 0) {
+                setIsResultTime(true)
+            }
             // TODO: get the number of voters
         }, 1000)
     }
