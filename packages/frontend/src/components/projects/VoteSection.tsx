@@ -1,3 +1,4 @@
+import Voteathon from '../../contexts/Voteathon'
 import User from '../../contexts/User'
 import { useEffect, useState, useContext } from 'react'
 import { styled } from 'styled-components'
@@ -11,6 +12,7 @@ type Props = {
 }
 
 const VoteSection = ({ projectId, projectName }: Props) => {
+    const voteathonContext = useContext(Voteathon)
     const userContext = useContext(User)
     const [alreadyVoted, setAlreadyVoted] = useState(true)
     const [isResultTime, setIsResultTime] = useState(false)
@@ -32,6 +34,14 @@ const VoteSection = ({ projectId, projectName }: Props) => {
             setIsResultTime(true)
         }
     }, [userContext])
+
+    useEffect(() => {
+        setTimeout(async () => {
+            console.log(voteathonContext.contract.scores)
+            //console.log(await voteathonContext.contract.scores(projectId))
+            // TODO: set each project votes
+        }, 2000)
+    }, [voteathonContext])
 
     const handleVoteClick = () => {
         setOpen(true)
