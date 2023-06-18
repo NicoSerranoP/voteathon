@@ -37,13 +37,9 @@ const VoteSection = ({ projectId, projectName }: Props) => {
         }
     }, [userContext])
 
-    const handleVoteClick = () => {
-        setOpen(true)
-    }
-
-    return (
-        <>
-            {isResultTime ? (
+    // TODO re-add in
+    /**
+     *             {isResultTime ? (
                 <>
                     <Container style={{ color: '#151616', fontWeight: '800' }}>
                         # votes
@@ -51,36 +47,42 @@ const VoteSection = ({ projectId, projectName }: Props) => {
                 </>
             ) : (
                 <>
-                    {alreadyVoted ? (
-                        <Container
-                            style={{
-                                background: 'transparent',
-                                textAlign: 'center',
-                            }}
-                        >
-                            <img src={PathCheckIcon} width={'20px'} />
-                            <p style={{ lineHeight: '15px' }}>
-                                You already voted.
-                            </p>
-                        </Container>
-                    ) : (
-                        <Container>
-                            <img src={VoteathonIconBlack} width={'90px'} />
-                            <Button onClick={handleVoteClick}>
-                                Vote for me
-                            </Button>
-                            <VotingModal
-                                open={open}
-                                projectId={projectId}
-                                projectName={projectName}
-                                onDeselect={() => {
-                            setOpen(false)
-                            syncAlreadyVoted()
-                        }}
-                            />
-                        </Container>
-                    )}
-                </>
+     */
+
+    const handleVoteClick = () => {
+        setOpen(true)
+    }
+
+    return (
+        <>
+            {alreadyVoted ? (
+                <Container
+                    style={{
+                        background: 'transparent',
+                        textAlign: 'center',
+                    }}
+                >
+                    <img src={PathCheckIcon} width={'20px'} />
+                    <p style={{ lineHeight: '15px' }}>
+                        You already voted.
+                    </p>
+                </Container>
+            ) : (
+                <Container>
+                    <img src={VoteathonIconBlack} width={'90px'} />
+                    <Button onClick={handleVoteClick}>
+                        Vote for me
+                    </Button>
+                    <VotingModal
+                        open={open}
+                        projectId={projectId}
+                        projectName={projectName}
+                        onDeselect={() => {
+                    setOpen(false)
+                    syncAlreadyVoted()
+                }}
+                    />
+                </Container>
             )}
         </>
     )
