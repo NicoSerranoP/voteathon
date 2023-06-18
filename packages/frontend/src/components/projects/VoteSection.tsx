@@ -4,6 +4,7 @@ import { styled } from 'styled-components'
 import VoteathonIconBlack from '../../assets/logo-black.svg'
 import PathCheckIcon from '../../assets/path-check.svg'
 import VotingModal from './VotingModal'
+import Voteathon from '../../contexts/Voteathon'
 
 type Props = {
     projectId: number
@@ -11,6 +12,7 @@ type Props = {
 }
 
 const VoteSection = ({ projectId, projectName }: Props) => {
+    const voteathonContext = useContext(Voteathon)
     const userContext = useContext(User)
     const [alreadyVoted, setAlreadyVoted] = useState(true)
     const [isResultTime, setIsResultTime] = useState(false)
@@ -35,6 +37,8 @@ const VoteSection = ({ projectId, projectName }: Props) => {
         if (seconds <= 0) {
             setIsResultTime(true)
         }
+
+        console.log(voteathonContext.contract.scores)
     }, [userContext])
 
     // TODO re-add in
