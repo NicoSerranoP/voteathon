@@ -2,42 +2,610 @@
     "0": {
         "claimCodes": [
             {
-                "code": "portion-engine",
+                "code": "curious-fall",
+                "used": false
+            },
+            {
+                "code": "pet-victory",
+                "used": false
+            },
+            {
+                "code": "canyon-arm",
+                "used": false
+            },
+            {
+                "code": "mix-oxygen",
+                "used": false
+            },
+            {
+                "code": "front-detect",
+                "used": false
+            },
+            {
+                "code": "mass-barrel",
+                "used": false
+            },
+            {
+                "code": "canoe-boost",
+                "used": false
+            },
+            {
+                "code": "force-very",
+                "used": false
+            },
+            {
+                "code": "stuff-arena",
+                "used": false
+            },
+            {
+                "code": "sort-limb",
+                "used": false
+            },
+            {
+                "code": "sand-detect",
+                "used": false
+            },
+            {
+                "code": "stone-slab",
+                "used": false
+            },
+            {
+                "code": "erupt-citizen",
+                "used": false
+            },
+            {
+                "code": "drum-filter",
+                "used": false
+            },
+            {
+                "code": "own-tank",
                 "used": false
             }
         ],
         "projectID": 0,
-        "generationTime": 1686948463421,
-        "name": "Hack All Da IPs"
+        "generationTime": 1687104531250,
+        "name": "UniRep"
     },
     "1": {
         "claimCodes": [
             {
-                "code": "lake-govern",
-                "used": true
+                "code": "exclude-jazz",
+                "used": false
             },
             {
-                "code": "vacant-mom",
-                "used": true
+                "code": "whip-gym",
+                "used": false
+            },
+            {
+                "code": "nurse-upgrade",
+                "used": false
+            },
+            {
+                "code": "oxygen-avoid",
+                "used": false
+            },
+            {
+                "code": "aerobic-provide",
+                "used": false
+            },
+            {
+                "code": "apology-hole",
+                "used": false
+            },
+            {
+                "code": "ask-exclude",
+                "used": false
+            },
+            {
+                "code": "horror-rib",
+                "used": false
+            },
+            {
+                "code": "pretty-gallery",
+                "used": false
+            },
+            {
+                "code": "model-endless",
+                "used": false
+            },
+            {
+                "code": "grocery-thunder",
+                "used": false
+            },
+            {
+                "code": "crime-spirit",
+                "used": false
+            },
+            {
+                "code": "smoke-unveil",
+                "used": false
+            },
+            {
+                "code": "siren-monitor",
+                "used": false
+            },
+            {
+                "code": "manage-benefit",
+                "used": false
             }
         ],
         "projectID": 1,
-        "generationTime": 1686948463421,
-        "name": "Beaknet"
+        "generationTime": 1687104531250,
+        "name": "Metamath in ZK"
+    },
+    "2": {
+        "claimCodes": [
+            {
+                "code": "provide-quarter",
+                "used": false
+            },
+            {
+                "code": "country-blood",
+                "used": false
+            },
+            {
+                "code": "name-myself",
+                "used": false
+            },
+            {
+                "code": "float-repair",
+                "used": false
+            },
+            {
+                "code": "wheel-strategy",
+                "used": false
+            },
+            {
+                "code": "sweet-warfare",
+                "used": false
+            },
+            {
+                "code": "snap-extend",
+                "used": false
+            },
+            {
+                "code": "once-nothing",
+                "used": false
+            },
+            {
+                "code": "cotton-idea",
+                "used": false
+            },
+            {
+                "code": "stone-enter",
+                "used": false
+            },
+            {
+                "code": "curious-pencil",
+                "used": false
+            },
+            {
+                "code": "tide-comic",
+                "used": false
+            },
+            {
+                "code": "industry-divorce",
+                "used": false
+            },
+            {
+                "code": "fringe-scorpion",
+                "used": false
+            },
+            {
+                "code": "young-symbol",
+                "used": false
+            }
+        ],
+        "projectID": 2,
+        "generationTime": 1687104531250,
+        "name": "EIP-1559"
+    },
+    "3": {
+        "claimCodes": [
+            {
+                "code": "drastic-nephew",
+                "used": false
+            },
+            {
+                "code": "math-forget",
+                "used": false
+            },
+            {
+                "code": "wise-cool",
+                "used": false
+            },
+            {
+                "code": "dove-venue",
+                "used": false
+            },
+            {
+                "code": "domain-soft",
+                "used": false
+            },
+            {
+                "code": "mango-smoke",
+                "used": false
+            },
+            {
+                "code": "peasant-erosion",
+                "used": false
+            },
+            {
+                "code": "pudding-evolve",
+                "used": false
+            },
+            {
+                "code": "bunker-vibrant",
+                "used": false
+            },
+            {
+                "code": "oppose-night",
+                "used": false
+            },
+            {
+                "code": "biology-uncover",
+                "used": false
+            },
+            {
+                "code": "dirt-rifle",
+                "used": false
+            },
+            {
+                "code": "veteran-hero",
+                "used": false
+            },
+            {
+                "code": "arctic-idea",
+                "used": false
+            },
+            {
+                "code": "foil-furnace",
+                "used": false
+            }
+        ],
+        "projectID": 3,
+        "generationTime": 1687104531250,
+        "name": "dec-id: Legacy-Derived Anonymous Credentials; dec-id"
+    },
+    "4": {
+        "claimCodes": [
+            {
+                "code": "ability-blouse",
+                "used": false
+            },
+            {
+                "code": "hole-pill",
+                "used": false
+            },
+            {
+                "code": "join-picture",
+                "used": false
+            },
+            {
+                "code": "table-pole",
+                "used": false
+            },
+            {
+                "code": "board-brother",
+                "used": false
+            },
+            {
+                "code": "gate-barrel",
+                "used": false
+            },
+            {
+                "code": "runway-pond",
+                "used": false
+            },
+            {
+                "code": "scrap-wear",
+                "used": false
+            },
+            {
+                "code": "bronze-govern",
+                "used": false
+            },
+            {
+                "code": "thank-own",
+                "used": false
+            },
+            {
+                "code": "stereo-garbage",
+                "used": false
+            },
+            {
+                "code": "federal-shoulder",
+                "used": false
+            },
+            {
+                "code": "spy-bacon",
+                "used": false
+            },
+            {
+                "code": "erosion-tomorrow",
+                "used": false
+            },
+            {
+                "code": "wear-biology",
+                "used": false
+            }
+        ],
+        "projectID": 4,
+        "generationTime": 1687104531250,
+        "name": "Cross-chain perpetual futures aggregator"
+    },
+    "5": {
+        "claimCodes": [
+            {
+                "code": "weather-cool",
+                "used": false
+            },
+            {
+                "code": "gauge-mass",
+                "used": false
+            },
+            {
+                "code": "hawk-column",
+                "used": false
+            },
+            {
+                "code": "soft-slogan",
+                "used": false
+            },
+            {
+                "code": "require-cool",
+                "used": false
+            },
+            {
+                "code": "demise-electric",
+                "used": false
+            },
+            {
+                "code": "snack-bacon",
+                "used": false
+            },
+            {
+                "code": "walk-car",
+                "used": false
+            },
+            {
+                "code": "remain-insane",
+                "used": false
+            },
+            {
+                "code": "gas-decorate",
+                "used": false
+            },
+            {
+                "code": "tourist-own",
+                "used": false
+            },
+            {
+                "code": "vocal-mesh",
+                "used": false
+            },
+            {
+                "code": "genuine-play",
+                "used": false
+            },
+            {
+                "code": "cattle-april",
+                "used": false
+            },
+            {
+                "code": "dirt-medal",
+                "used": false
+            }
+        ],
+        "projectID": 5,
+        "generationTime": 1687104531250,
+        "name": "TEE contracts"
     },
     "-1": {
         "claimCodes": [
             {
-                "code": "silly-alter",
+                "code": "convince-scorpion",
                 "used": false
             },
             {
-                "code": "easy-lava",
+                "code": "ethics-cabin",
+                "used": false
+            },
+            {
+                "code": "eye-wing",
+                "used": false
+            },
+            {
+                "code": "kidney-repair",
+                "used": false
+            },
+            {
+                "code": "toss-pink",
+                "used": false
+            },
+            {
+                "code": "rookie-panther",
+                "used": false
+            },
+            {
+                "code": "spy-gold",
+                "used": false
+            },
+            {
+                "code": "board-blame",
+                "used": false
+            },
+            {
+                "code": "member-farm",
+                "used": false
+            },
+            {
+                "code": "increase-arctic",
+                "used": false
+            },
+            {
+                "code": "carpet-rug",
+                "used": false
+            },
+            {
+                "code": "agent-target",
+                "used": false
+            },
+            {
+                "code": "nuclear-sleep",
+                "used": false
+            },
+            {
+                "code": "fossil-claw",
+                "used": false
+            },
+            {
+                "code": "census-dream",
+                "used": false
+            },
+            {
+                "code": "peasant-entry",
+                "used": false
+            },
+            {
+                "code": "love-hand",
+                "used": false
+            },
+            {
+                "code": "scrap-electric",
+                "used": false
+            },
+            {
+                "code": "this-cave",
+                "used": false
+            },
+            {
+                "code": "idle-potato",
+                "used": false
+            },
+            {
+                "code": "remain-monster",
+                "used": false
+            },
+            {
+                "code": "hair-heart",
+                "used": false
+            },
+            {
+                "code": "element-uniform",
+                "used": false
+            },
+            {
+                "code": "hand-dune",
+                "used": false
+            },
+            {
+                "code": "island-property",
+                "used": false
+            },
+            {
+                "code": "annual-wide",
+                "used": false
+            },
+            {
+                "code": "noodle-what",
+                "used": false
+            },
+            {
+                "code": "fall-tide",
+                "used": false
+            },
+            {
+                "code": "taste-human",
+                "used": false
+            },
+            {
+                "code": "weird-oven",
+                "used": false
+            },
+            {
+                "code": "squeeze-drastic",
+                "used": false
+            },
+            {
+                "code": "library-tissue",
+                "used": false
+            },
+            {
+                "code": "sell-clean",
+                "used": false
+            },
+            {
+                "code": "usual-peanut",
+                "used": false
+            },
+            {
+                "code": "ketchup-shaft",
+                "used": false
+            },
+            {
+                "code": "glare-hammer",
+                "used": false
+            },
+            {
+                "code": "raw-card",
+                "used": false
+            },
+            {
+                "code": "mammal-volume",
+                "used": false
+            },
+            {
+                "code": "dad-fabric",
+                "used": false
+            },
+            {
+                "code": "tribe-bean",
+                "used": false
+            },
+            {
+                "code": "answer-say",
+                "used": false
+            },
+            {
+                "code": "humor-hero",
+                "used": false
+            },
+            {
+                "code": "scan-diagram",
+                "used": false
+            },
+            {
+                "code": "depart-goose",
+                "used": false
+            },
+            {
+                "code": "remain-property",
+                "used": false
+            },
+            {
+                "code": "any-baby",
+                "used": false
+            },
+            {
+                "code": "manage-amused",
+                "used": false
+            },
+            {
+                "code": "insane-bulb",
+                "used": false
+            },
+            {
+                "code": "pretty-thank",
+                "used": false
+            },
+            {
+                "code": "silly-robust",
                 "used": false
             }
         ],
         "projectID": -1,
-        "generationTime": 1686948463421,
+        "generationTime": 1687104531250,
         "name": ""
     }
 }

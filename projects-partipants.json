@@ -5,83 +5,49 @@
             "name": "",
             "description": "",
             "challenge": "",
-            "deliverables": "",
-            "repoUrl": "",
-            "members": [
-                {
-                    "participantId": 0
-                },
-                {
-                    "participantId": 1
-                }
-            ]
+            "numTeamMembers": 50
         },        
         {
             "id": 0,    
             "name": "UniRep",
-            "description": "UniRep is a zero-knowledge protocol that securely manages user data through anonymous identifiers, enabling trustless interactions and enhanced user privacy in applications.",
-            "challenge": "Will it blend?",
-            "deliverables": "Stuxnet executable",
-            "repoUrl": "https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
-            "members": [
-                {
-                    "participantId": 2
-                }
-            ]
+            "description": "UniRep is a zero-knowledge protocol that securely manages user data through anonymous identifiers, enabling trustless interactions and enhanced user privacy in applications. UniRep expands the notion of reputation to include various user data aspects, such as preferences, activity, alignments, and ownership. Using anonymous identifiers (epoch keys), The protocol allows for trustless engagement with applications while preserving user privacy. This approach promotes non-custodial applications that don’t hold user data, reducing data breach risks and emphasizing security for both users and developers.",
+            "challenge": "Use “create-unirep-app” to build a simple app that proves user data",
+            "numTeamMembers": 15
         },
         {
             "id": 1,    
-            "name": "UniRep-2",
-            "description": "Using anonymous identifiers (epoch keys), The protocol allows for trustless engagement with applications while preserving user privacy.",
-            "challenge": "What if AI was soft & cute?",
-            "deliverables": "Fluffy extinction",
-            "repoUrl": "https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-            "members": [
-                {
-                    "participantId": 3
-                },
-                {
-                    "participantId": 4
-                }
-            ]
+            "name": "Metamath in ZK",
+            "description": "There is a great potential for synergy between zero-knowledge proofs (which allow for succinct cryptographic checking of any computational statement) and formal proofs (which allow any mathematical statement to be checked computationally). In this project, we will look at using the many zero-knowledge codebases that have proliferated in the last few years to check Metamath, a language for formal theorem proving. Metamath has a variety of implementations (https://us.metamath.org/other.html#verifiers) and has the potential to be a good benchmark between systems, as well as being independently useful as a backend to many formal method projects.",
+            "challenge": "Challenges in this project will include understanding the nuances and limitations of zk-proof systems, and implementing workarounds to get the Metamath checkers to compile.",
+            "numTeamMembers": 15
         },
         {
             "id": 2,    
-            "name": "UniRep-3",
-            "description": "Another description.Using anonymous identifiers (epoch keys), The protocol allows for trustless engagement with applications while preserving user privacy.",
-            "challenge": "What if AI was soft & cute?",
-            "deliverables": "Fluffy extinction",
-            "repoUrl": "https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-            "members": [
-                {
-                    "participantId": 5
-                },
-                {
-                    "participantId": 6
-                }
-            ]
-        }
-    ],
-    "participants": [
-        {
-            "id": 0,
-            "name": "Steve Steverson"
+            "name": "EIP-1559",
+            "description": "We envision a world where lot of crypto agents execute transaction on behalf of users in a trustless way. One key building block of such system is the ability to prove crypto agent acts in alignment with the requester’s wish, concretely, the ability to prove some address made an on-chain function call with certain arguments and successfully executed some tasks requested by the requester. There already exist request-to-quote systems but they all run in a trust-needed fashion and not support more complex tasks than swap, so we want to build a zkproof utility / system that allow a user specifies tasks and a crypto agent do it for the user and claim rewards based by submitting a proof to a contract. If not claim by certain date, then automatically return to requester.",
+            "challenge": "How to make the system generalized for arbitrary function with arbitrary input? How to implement the proof? How to know what to verify since the argument pre-determined may change especially given volatile market condition? What format of function and argument can be stored in the contract?Would the additional cost worth it? What would be a good tokenomics model here?",
+            "numTeamMembers": 15
         },
         {
-            "id": 1,
-            "name": "Cotton-eyed Joe"
+            "id": 3,    
+            "name": "dec-id: Legacy-Derived Anonymous Credentials; dec-id",
+            "description": "In this project, we will be building an end-to-end system that allows users who satisfy certain criteria to obtain an identity and use it. In particular, we will be simulating a Chainlink DAO – a governance smart contract handling voting. In our DAO, only users who are especially involved (as shown by their online interactions with Chainlink) with Chainlink and could even be called true believers :supervillain: can qualify to enroll. We will use one or more external web sources to confirm how enthusiastic a user is about Chainlink, use these to generate attested credentials and finally, gather credentials to form identities. Those who are enthusiastic about Chainlink are obviously very smart and cool :sunglasses:. So, like all cool people, they are both opinionated and privacy conscious – they do not want to reveal personal information and they also do not want to reveal what they vote for, lest it be divisive. These privacy requirements pose interesting challenges!",
+            "challenge": "In this project, we will be building a simple, privacy-preserving identity solution using a decentralized tool called DECO. Our solution would enable a user to derive a form of identity called anonymous credentials, using existing data sources, where even the distributed DECO network, which is verifying and certifying statements about this user, would only learn the bare minimum about her. That is to say, each function (e.g. obtaining credentials or using identities to avail services) of the identity system can be conducted in zero-knowledge.",
+            "numTeamMembers": 15
         },
-        {
-            "id": 2,
-            "name": "Coolie McCoolface"
+         {
+            "id": 4,    
+            "name": "Cross-chain perpetual futures aggregator",
+            "description": "We will use layer zero, axelar, hyperlane or another protocol to build a perpetual swap aggregator across chains.",
+            "challenge": "connect to two perp dexes across two chains, routing algorithm for the best price",
+            "numTeamMembers": 15
         },
-        {
-            "id": 3,
-            "name": "Zero Cool"
-        },
-        {
-            "id": 4,
-            "name": "The Protagonist"
+          {
+            "id": 5,    
+            "name": "TEE contracts",
+            "description": "TEE smart contracts like Secret, Oasis, Phala, Obscuro, are the hot new programming framework. There is an obstacle to providing privacy, which is the need to use ORAM or even a linear scan to avoid side channels.  Basically Secret Network have not been able to provide strong privacy after the disclosure. Can we fix it? It turns out there is a surprisingly simple way to use the existing programming models to provide off-chain computation. Rolls ups for free using TEEs. Basically we are using the integrity&privacy property of the TEE as a way to skip needing a zk Rollup or dispute period, etc. We will use as a starting point the dockerized development environment from the sgxonerated paper. We could explore using Oasis instead of SN in two concurrent task forces.  ",
+            "challenge": "Learn about private smart contracts! This is going even deeper than private smart contracts, exploring a subtle new programming model. Exploring this concrete example then abstracting from it is a good research direction. Verifying an attestation from within a smart contract, is that possible? That would allow smart contracts to pass control to alternative enclaves.",
+            "numTeamMembers": 15
         }
     ]
 }

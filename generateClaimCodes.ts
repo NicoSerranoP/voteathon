@@ -23,7 +23,7 @@ if (claimCodes !== undefined) {
 
 for (const proj of projects) {
     claimCodeManager.generateClaimCodeSet(
-        proj.members.length,
+        proj.numTeamMembers,
         proj.id,
         proj.name
     )
