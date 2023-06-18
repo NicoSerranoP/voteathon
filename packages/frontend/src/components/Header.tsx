@@ -1,6 +1,7 @@
 import { styled } from 'styled-components'
 import VoteathonIcon from '../assets/logo.svg'
 import GithubIcon from '../assets/github.svg'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
     const onClickClaim = () => {
@@ -14,7 +15,11 @@ const Header = () => {
                 <h4>voteathon</h4>
             </RightContainer>
             <LeftContainer>
-                <ClaimButton onClick={onClickClaim}>Claim reward</ClaimButton>
+                <Link to="/claim">
+                    <ClaimButton onClick={onClickClaim}>
+                        Claim reward
+                    </ClaimButton>
+                </Link>
                 <img src={GithubIcon} width={'30px'} />
             </LeftContainer>
         </Container>
