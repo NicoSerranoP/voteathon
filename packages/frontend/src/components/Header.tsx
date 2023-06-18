@@ -1,11 +1,13 @@
 import { styled } from 'styled-components'
 import VoteathonIcon from '../assets/logo.svg'
 import GithubIcon from '../assets/github.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Header = () => {
+    const navigate = useNavigate()
+
     const onClickClaim = () => {
-        console.log('claiming reward')
+        navigate('/claim')
     }
 
     return (
