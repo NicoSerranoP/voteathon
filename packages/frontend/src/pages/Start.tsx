@@ -5,7 +5,7 @@ import logo from '../assets/voteathon-emblem.png'
 
 import User from '../contexts/User'
 import { styled } from 'styled-components'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 const DEFAULT_CLAIM_CODE = 'FILL-ME'
 const CLAIM_CODE_REGEX = /^\w+-\w+/
@@ -25,6 +25,14 @@ export default observer(() => {
         const isClaimCodeValid =
             CLAIM_CODE_REGEX.test(claimCode) && claimCode != DEFAULT_CLAIM_CODE
         setClaimCodeError(!isClaimCodeValid)
+    }
+
+    const handleClaimCodeClick = async () => {
+        if (!userContext.userState || claimCodeError) return
+        const { projectID } = await userContext.signup(claimCode)
+        if (projectID >= 0) {
+            await userContext.joinProject(projectID)
+        }
     }
 
     return (
@@ -62,17 +70,7 @@ export default observer(() => {
                         Claim code should be in the format of WORD-WORD
                     </p>
                 )}
-                <Button
-                    onClick={async () => {
-                        if (!userContext.userState || claimCodeError) return
-                        const { projectID } = await userContext.signup(
-                            claimCode
-                        )
-                        if (projectID >= 0) {
-                            await userContext.joinProject(projectID)
-                        }
-                    }}
-                >
+                <Button onClick={handleClaimCodeClick}>
                     {userContext.userState ? 'Claim' : 'Initializing...'}
                 </Button>
             </RightContainer>
