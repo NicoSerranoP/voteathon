@@ -16,6 +16,7 @@ class User {
     provableData: bigint[] = []
     userState?: UserState
     provider: any
+    projectID: number | undefined = undefined
 
     constructor() {
         makeAutoObservable(this)
@@ -134,6 +135,7 @@ class User {
         await this.provider.waitForTransaction(data.hash)
         await this.userState.waitForSync()
         await this.loadData()
+        this.projectID = projectID
     }
 
     async vote(
@@ -141,6 +143,7 @@ class User {
         emoji: number,
     ) {
         if (!this.userState) throw new Error('user state not initialized')
+        if (projectID === this.projectID) throw new Error('you cannot vote your project')
 
         const epochKeyProof = await this.userState.genEpochKeyProof({
             nonce: 1,
