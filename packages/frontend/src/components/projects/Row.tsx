@@ -13,7 +13,7 @@ const Row = ({ index, project }: Props) => {
             <LeftContainer>
                 <h3>{`${index + 1}: ${project.name}`}</h3>
                 <p>{project.description}</p>
-                <BoldText>{project.deliverables}</BoldText>
+                <BoldText>{project.challenge}</BoldText>
             </LeftContainer>
             <VoteSection projectId={project.id} />
         </Container>

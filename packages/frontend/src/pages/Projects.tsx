@@ -31,6 +31,7 @@ const Projects = () => {
 const Container = styled.div`
     max-width: 70%;
     margin: auto;
+    padding-bottom: 70px;
 `
 
 export default Projects

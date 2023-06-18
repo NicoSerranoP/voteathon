@@ -7,7 +7,5 @@ export type Project = {
     name: string
     description: string
     challenge: string
-    deliverables: string
-    repoUrl: string
-    members: Member[]
+    numTeamMembers: number
 }
