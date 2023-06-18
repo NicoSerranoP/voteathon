@@ -1,14 +1,20 @@
+import React from 'react'
+import { observer } from 'mobx-react-lite'
 import { styled } from 'styled-components'
-
 import { useState } from 'react';
+import User from '../contexts/User';
 
-const NFT = () => {
-    const [inputFields, setInputFields] = useState("0x");
-    const onClickMint = () => {
-        console.log('mint')
+export default observer(() => {
+    const userContext = React.useContext(User)
+    const [inputField, setinputField] = useState("0x");
+    const onClickMint = async () => {
+        console.log('ust')
+        await userContext.stateTransition()
+        console.log('claim')
+        await userContext.claimPrize(inputField)
     }
     const handleInputChange = (event: any) => {
-        setInputFields(event.target.value);
+        setinputField(event.target.value);
     };
 
     return (
@@ -21,14 +27,16 @@ const NFT = () => {
                     width={'50%'}
                 />
             </Image>
+            <div>Your project is {userContext.projectID ?? 'undefined'}, here is the NFT for you.
+Please enter your wallet address to receive it.</div>
             <div>
-                <input value={inputFields} onChange={(event) => {handleInputChange(event)}} />
+                <input value={inputField} onChange={(event) => {handleInputChange(event)}} />
             </div>
 
             <MintButton onClick={onClickMint}>Mint</MintButton>
         </Container>
     )
-}
+})
 
 const MintButton = styled.button`
     cursor: pointer;
@@ -54,5 +62,3 @@ const Container = styled.div`
     align-items: center;
     justify-content: space-between;
 `
-
-export default NFT
