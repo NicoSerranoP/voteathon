@@ -15,7 +15,7 @@ const Row = ({ index, project }: Props) => {
                 <p>{project.description}</p>
                 <BoldText>{project.deliverables}</BoldText>
             </LeftContainer>
-            <VoteSection />
+            <VoteSection projectId={project.id} />
         </Container>
     )
 }

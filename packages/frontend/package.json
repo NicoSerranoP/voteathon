@@ -20,6 +20,7 @@
         "ethers": "^5.7.2",
         "file-loader": "^6.2.0",
         "mobx-react-lite": "^3.4.0",
+        "react-modal": "^3.16.1",
         "styled-components": "^6.0.0-rc.3"
     },
     "devDependencies": {
@@ -29,6 +30,7 @@
         "@svgr/webpack": "^8.0.1",
         "@types/react": "^18.0.32",
         "@types/react-dom": "^18.2.5",
+        "@types/react-modal": "^3.16.0",
         "anondb": "^0.0.16",
         "assert": "^2.0.0",
         "babel-loader": "^8.2.5",
