@@ -34,10 +34,10 @@ export default observer(() => {
     }
 
     const handleClaimCodeClick = async () => {
+        if (!userContext.userState) return
         setClaimingMessage(
             'Adding you to your project &  redirecting you to the voting page. This might take a while...'
         )
-        //if (!userContext.userState) return
         const { projectID } = await userContext.signup(claimCode)
         if (projectID >= 0) {
             await userContext.joinProject(projectID)
