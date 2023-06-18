@@ -19,6 +19,11 @@ export async function deployApp() {
     const verifierF = await ethers.getContractFactory('DataProofVerifier')
     const verifier = await verifierF.deploy()
     await verifier.deployed()
+
+    const verifierF1 = await ethers.getContractFactory('ProjectProofVerifier')
+    const verifier1 = await verifierF1.deploy()
+    await verifier1.deployed()
+
     const nftF = await ethers.getContractFactory('VoteathonNFT')
     const nft = await nftF.deploy(
         'ipfs://QmNtYnjqeqWbRGC4R7fd9DCXWnQF87ufv7S2zGULtbSpLA'
@@ -27,6 +32,7 @@ export async function deployApp() {
     const app = await App.deploy(
         unirep.address,
         verifier.address,
+        verifier1.address,
         nft.address,
         epochLength,
         teams.projects.length

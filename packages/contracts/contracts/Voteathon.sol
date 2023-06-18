@@ -13,6 +13,13 @@ interface IVerifier {
     ) external view returns (bool);
 }
 
+interface IProjectVerifier {
+    function verifyProof(
+        uint256[13] calldata publicSignals,
+        uint256[8] calldata proof
+    ) external view returns (bool);
+}
+
 enum Emoji {
     THUMBS_UP,
     THUMBS_DOWN,
@@ -23,10 +30,13 @@ enum Emoji {
 contract Voteathon {
     Unirep public unirep;
     IVerifier internal dataVerifier;
+    IProjectVerifier internal projectVerifier;
     VoteathonNFT public nft;
 
-    mapping(uint256 => uint256[]) participants;
-    mapping(uint256 => uint256) voted;
+    mapping(uint256 => uint256[]) public participants;
+    mapping(uint256 => uint256) public counts;
+
+    mapping(uint256 => uint256) public voted;
     mapping(uint256 => bool) claimed;
 
     int[] public scores;
@@ -38,6 +48,7 @@ contract Voteathon {
     constructor(
         Unirep _unirep,
         IVerifier _dataVerifier,
+        IProjectVerifier _projectVerifier,
         VoteathonNFT _nft,
         uint48 _epochLength,
         uint8 _numTeams
@@ -47,6 +58,9 @@ contract Voteathon {
 
         // set verifier address
         dataVerifier = _dataVerifier;
+
+        // set verifier address
+        projectVerifier = _projectVerifier;
 
         // set nft address
         nft = _nft;
@@ -83,6 +97,7 @@ contract Voteathon {
         );
         require(signals.revealNonce == 1);
         require(signals.nonce == 0);
+        require(counts[projectID] < 10);
         participants[projectID].push(signals.epochKey);
         // give user data if there is attestation before
         uint48 epoch = unirep.attesterCurrentEpoch(uint160(address(this)));
@@ -91,21 +106,33 @@ contract Voteathon {
         for (uint256 i = 0; i < data.length; i++) {
             unirep.attest(signals.epochKey, epoch, i, data[i]);
         }
+        counts[projectID] += 1;
     }
 
     function vote(
         uint256 projectID,
         Emoji emoji,
-        uint256[] memory publicSignals,
-        uint256[8] memory proof
+        uint256[13] calldata publicSignals,
+        uint256[8] calldata proof
     ) public {
-        require(projectID < numTeams);
-        unirep.verifyEpochKeyProof(publicSignals, proof);
-        Unirep.EpochKeySignals memory signals = unirep.decodeEpochKeySignals(
-            publicSignals
-        );
-        require(signals.revealNonce == 1);
-        require(signals.nonce == 1);
+        require(projectID < numTeams, "projectID out of range");
+
+        Unirep.EpochKeySignals memory signals;
+
+        signals.epochKey = publicSignals[0];
+        signals.stateTreeRoot = publicSignals[1];
+        (
+            signals.revealNonce,
+            signals.attesterId,
+            signals.epoch,
+            signals.nonce
+        ) = unirep.decodeEpochKeyControl(publicSignals[2]);
+        
+        require(signals.revealNonce == 1, "reveal nonce wrong");
+        require(signals.nonce == 1, "nonce wrong");
+
+        verifyProjectProof(publicSignals, proof);
+
         if (emoji == Emoji.THUMBS_UP || emoji == Emoji.THUMBS_DOWN) {
             require(voted[signals.epochKey] + 1 <= 2);
             voted[signals.epochKey] += 1;
@@ -118,7 +145,7 @@ contract Voteathon {
             else if (emoji == Emoji.HEART_BROKEN) scores[projectID] -= 2;
         }
         projectData[projectID][uint(emoji)] += 1;
-
+        
         uint[] memory members = participants[projectID];
         uint48 epoch = unirep.attesterCurrentEpoch(uint160(address(this)));
         require(epoch == 0);
@@ -182,5 +209,12 @@ contract Voteathon {
         uint256[8] calldata proof
     ) public view returns (bool) {
         return dataVerifier.verifyProof(publicSignals, proof);
+    }
+
+    function verifyProjectProof(
+        uint256[13] calldata publicSignals,
+        uint256[8] calldata proof
+    ) public view returns (bool) {
+        return projectVerifier.verifyProof(publicSignals, proof);
     }
 }

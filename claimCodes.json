@@ -23,7 +23,7 @@
             },
             {
                 "code": "mass-barrel",
-                "used": false
+                "used": true
             },
             {
                 "code": "canoe-boost",

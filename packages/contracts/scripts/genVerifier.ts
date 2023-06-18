@@ -8,6 +8,7 @@ const verifiersPath = path.join(config.paths.sources)
 const zkFilesPath = path.join('../../circuits/zksnarkBuild')
 const Circuit = {
     dataProof: 'dataProof',
+    projectProof: 'projectProof',
 }
 
 const main = async (): Promise<number> => {
