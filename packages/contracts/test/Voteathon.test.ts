@@ -57,7 +57,9 @@ describe('Voteathon', function () {
     it('deployment', async function () {
         const [deployer] = await ethers.getSigners()
         const nftF = await ethers.getContractFactory('VoteathonNFT')
-        nft = await nftF.deploy()
+        nft = await nftF.deploy(
+            'ipfs://QmNtYnjqeqWbRGC4R7fd9DCXWnQF87ufv7S2zGULtbSpLA'
+        )
         await nft.deployed()
         unirep = await deployUnirep(deployer)
         const verifierF = await ethers.getContractFactory('DataProofVerifier')
@@ -72,6 +74,7 @@ describe('Voteathon', function () {
             numTeams
         )
         await voteathon.deployed()
+        await nft.setVoteathonAddress(voteathon.address).then((t) => t.wait())
     })
 
     it('voter sign up', async () => {

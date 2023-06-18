@@ -138,8 +138,7 @@ contract Voteathon {
             _findWinner();
         }
         require(score >= winnerScore, 'Insufficient score');
-        // TODO: fix uri
-        nft.awardItem(receiver, 'test');
+        nft.awardItem(receiver);
         claimed[publicSignals[1]] = true;
     }
 
