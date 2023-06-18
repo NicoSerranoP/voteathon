@@ -15,7 +15,7 @@ const Row = ({ index, project }: Props) => {
                 <p style={{ lineHeight: '15px' }}>{project.description}</p>
                 <BoldText>{project.challenge}</BoldText>
             </LeftContainer>
-            <VoteSection projectId={project.id} />
+            <VoteSection projectId={project.id} projectName={project.name} />
         </Container>
     )
 }

@@ -1,13 +1,15 @@
 import Modal from 'react-modal'
 import { styled } from 'styled-components'
+import VoteathonIconBlack from '../../assets/logo-black.svg'
 
 type Props = {
     open: boolean
     projectId: number
+    projectName: string
     onDeselect: () => void
 }
 
-const VotingModal = ({ open, projectId, onDeselect }: Props) => {
+const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
     return (
         <StyledModal
             isOpen={open}
@@ -22,23 +24,60 @@ const VotingModal = ({ open, projectId, onDeselect }: Props) => {
                 },
             }}
         >
-            <h2>Vote for your favorite project</h2>
-            <p>Project ID: {projectId}</p>
+            <img
+                src={VoteathonIconBlack}
+                width={'90px'}
+                style={{ margin: 'auto' }}
+            />
+            <h2 style={{ marginBottom: '5px' }}>
+                Are you sure to vote on this project?
+            </h2>
+            <p style={{ marginBottom: '15px' }}>
+                {projectName} - id: {projectId}
+            </p>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '20px',
+                }}
+            >
+                <Button>Yes</Button>
+                <Button>No</Button>
+            </div>
         </StyledModal>
     )
 }
 
 const StyledModal = styled(Modal)`
+    cursor: auto;
     background: rgba(255, 233, 77, 0.9);
     color: #151616;
     blocksize: 'fit-content';
     width: 50%;
     border: none;
-    padding-block: 40px;
-    position: fixed;
-    top: 35%;
-    right: 100px;
-    bottom: auto;
+    padding-block: 10px;
+    padding-inline: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+`
+
+const Button = styled.button`
+    cursor: pointer;
+    background: #151616;
+    color: #fcfcfc;
+    border-radius: 10px;
+    border: none;
+    padding-inline: 20px;
+    padding-block: 10px;
+    font-family: inherit;
+    font-weight: 500;
 `
 
 export default VotingModal
