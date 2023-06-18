@@ -5,16 +5,18 @@ import logo from '../assets/voteathon-emblem.png'
 
 import User from '../contexts/User'
 import { styled } from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const DEFAULT_CLAIM_CODE = 'FILL-ME'
 const CLAIM_CODE_REGEX = /^\w+-\w+/
 
 export default observer(() => {
+    const navigate = useNavigate()
     const userContext = React.useContext(User)
     const { claimCode: claimCodeParam } = useParams()
     const [claimCode, setClaimCode] = useState(claimCodeParam ?? '')
-    const [claimCodeError, setClaimCodeError] = useState(false)
+    const [claimCodeError, setClaimCodeError] = useState<string | null>(null)
+    const [claimingMessage, setClaimingMessage] = useState<string | null>(null)
 
     const handleClaimCodeChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -24,15 +26,24 @@ export default observer(() => {
 
         const isClaimCodeValid =
             CLAIM_CODE_REGEX.test(claimCode) && claimCode != DEFAULT_CLAIM_CODE
-        setClaimCodeError(!isClaimCodeValid)
+        if (!isClaimCodeValid) {
+            setClaimCodeError('Claim code should be in the format of WORD-WORD')
+        } else {
+            setClaimCodeError(null)
+        }
     }
 
     const handleClaimCodeClick = async () => {
-        if (!userContext.userState || claimCodeError) return
+        setClaimingMessage(
+            'Adding you to your project &  redirecting you to the voting page. This might take a while...'
+        )
+        //if (!userContext.userState) return
         const { projectID } = await userContext.signup(claimCode)
         if (projectID >= 0) {
             await userContext.joinProject(projectID)
         }
+        navigate('/projects')
+        setClaimingMessage(null)
     }
 
     return (
@@ -63,16 +74,21 @@ export default observer(() => {
                     id="claimCode"
                     value={claimCode}
                     onChange={handleClaimCodeChange}
+                    disabled={!userContext.userState || !!claimingMessage}
                     placeholder={DEFAULT_CLAIM_CODE}
                 />
                 {claimCodeError && (
                     <p style={{ fontSize: '11px', width: '100%' }}>
-                        Claim code should be in the format of WORD-WORD
+                        {claimCodeError}
                     </p>
                 )}
-                <Button onClick={handleClaimCodeClick}>
-                    {userContext.userState ? 'Claim' : 'Initializing...'}
-                </Button>
+                {claimingMessage ? (
+                    <SuccessMessage>{claimingMessage}</SuccessMessage>
+                ) : (
+                    <Button onClick={handleClaimCodeClick}>
+                        {userContext.userState ? 'Claim' : 'Initializing...'}
+                    </Button>
+                )}
             </RightContainer>
         </Container>
     )
@@ -147,4 +163,13 @@ const Button = styled.button`
     margin-top: 25px;
     padding-block: 10px;
     padding-inline: 40px;
+`
+
+const SuccessMessage = styled.p`
+    padding-block: 7px;
+    padding-inline: 20px;
+    background: #a6e275;
+    color: #151616;
+    font-size: 10px;
+    font-weight: 500;
 `
