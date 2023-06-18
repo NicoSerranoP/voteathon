@@ -21,6 +21,7 @@ const Container = styled.div`
 `
 
 const Button = styled.button`
+    cursor: pointer;
     background: #fcfcfc;
     border-radius: 10px;
     border: none;

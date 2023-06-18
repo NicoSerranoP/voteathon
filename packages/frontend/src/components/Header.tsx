@@ -34,6 +34,7 @@ const LeftContainer = styled.div`
 `
 
 const ClaimButton = styled.button`
+    cursor: pointer;
     background: #ffe94d;
     border-radius: 10px;
     border: none;
