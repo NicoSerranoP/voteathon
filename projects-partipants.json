@@ -5,83 +5,28 @@
             "name": "",
             "description": "",
             "challenge": "",
-            "deliverables": "",
-            "repoUrl": "",
-            "members": [
-                {
-                    "participantId": 0
-                },
-                {
-                    "participantId": 1
-                }
-            ]
+            "numTeamMembers": 30
         },        
         {
             "id": 0,    
             "name": "UniRep",
             "description": "UniRep is a zero-knowledge protocol that securely manages user data through anonymous identifiers, enabling trustless interactions and enhanced user privacy in applications.",
             "challenge": "Will it blend?",
-            "deliverables": "Stuxnet executable",
-            "repoUrl": "https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
-            "members": [
-                {
-                    "participantId": 2
-                }
-            ]
+            "numTeamMembers": 10
         },
         {
             "id": 1,    
             "name": "UniRep-2",
             "description": "Using anonymous identifiers (epoch keys), The protocol allows for trustless engagement with applications while preserving user privacy.",
             "challenge": "What if AI was soft & cute?",
-            "deliverables": "Fluffy extinction",
-            "repoUrl": "https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-            "members": [
-                {
-                    "participantId": 3
-                },
-                {
-                    "participantId": 4
-                }
-            ]
+            "numTeamMembers": 10
         },
         {
             "id": 2,    
             "name": "UniRep-3",
             "description": "Another description.Using anonymous identifiers (epoch keys), The protocol allows for trustless engagement with applications while preserving user privacy.",
             "challenge": "What if AI was soft & cute?",
-            "deliverables": "Fluffy extinction",
-            "repoUrl": "https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-            "members": [
-                {
-                    "participantId": 5
-                },
-                {
-                    "participantId": 6
-                }
-            ]
-        }
-    ],
-    "participants": [
-        {
-            "id": 0,
-            "name": "Steve Steverson"
-        },
-        {
-            "id": 1,
-            "name": "Cotton-eyed Joe"
-        },
-        {
-            "id": 2,
-            "name": "Coolie McCoolface"
-        },
-        {
-            "id": 3,
-            "name": "Zero Cool"
-        },
-        {
-            "id": 4,
-            "name": "The Protagonist"
+            "numTeamMembers": 10
         }
     ]
 }
