@@ -18,8 +18,8 @@
         },        
         {
             "id": 0,    
-            "name": "Hack All Da IPs",
-            "description": "Hack the planet",
+            "name": "UniRep",
+            "description": "UniRep is a zero-knowledge protocol that securely manages user data through anonymous identifiers, enabling trustless interactions and enhanced user privacy in applications.",
             "challenge": "Will it blend?",
             "deliverables": "Stuxnet executable",
             "repoUrl": "https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
@@ -31,8 +31,8 @@
         },
         {
             "id": 1,    
-            "name": "Beaknet",
-            "description": "Skynet, but with Furbies",
+            "name": "UniRep-2",
+            "description": "Using anonymous identifiers (epoch keys), The protocol allows for trustless engagement with applications while preserving user privacy.",
             "challenge": "What if AI was soft & cute?",
             "deliverables": "Fluffy extinction",
             "repoUrl": "https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
@@ -42,6 +42,22 @@
                 },
                 {
                     "participantId": 4
+                }
+            ]
+        },
+        {
+            "id": 2,    
+            "name": "UniRep-3",
+            "description": "Another description.Using anonymous identifiers (epoch keys), The protocol allows for trustless engagement with applications while preserving user privacy.",
+            "challenge": "What if AI was soft & cute?",
+            "deliverables": "Fluffy extinction",
+            "repoUrl": "https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "members": [
+                {
+                    "participantId": 5
+                },
+                {
+                    "participantId": 6
                 }
             ]
         }

@@ -1,11 +1,28 @@
+import { useState } from 'react'
 import { styled } from 'styled-components'
 import VoteathonIconBlack from '../../assets/logo-black.svg'
+import VotingModal from './VotingModal'
 
-const VoteSection = () => {
+type Props = {
+    projectId: number
+}
+
+const VoteSection = ({ projectId }: Props) => {
+    const [open, setOpen] = useState(false)
+
+    const handleVoteClick = () => {
+        setOpen(true)
+    }
+
     return (
         <Container>
             <img src={VoteathonIconBlack} width={'90px'} />
-            <Button>Vote for me</Button>
+            <Button onClick={handleVoteClick}>Vote for me</Button>
+            <VotingModal
+                open={open}
+                projectId={projectId}
+                onDeselect={() => setOpen(false)}
+            />
         </Container>
     )
 }
@@ -21,6 +38,7 @@ const Container = styled.div`
 `
 
 const Button = styled.button`
+    cursor: pointer;
     background: #fcfcfc;
     border-radius: 10px;
     border: none;

@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import User from '../../contexts/User'
+import { useContext, useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import { END_DATE, START_DATE } from '../../constants'
+import data from '../../../../../projects-partipants.json'
 
 const startHour = new Date(START_DATE).toLocaleTimeString('en-US')
 const startDay = new Date(START_DATE).getDate()
@@ -12,12 +14,46 @@ const endDay = new Date(END_DATE).getDate()
 const endMonth = new Date(END_DATE).toLocaleString('default', { month: 'long' })
 
 const TopDescription = () => {
-    // TODO: get the epoch start & epoch end
+    const userContext = useContext(User)
     // to calculate how long would it take to finish voting
     const [isVotingTime, setIsVotingTime] = useState(false)
-    const [isResultTime, setIsResultTime] = useState(true)
+    const [isResultTime, setIsResultTime] = useState(false)
+    const [votingEnds, setVotingEnds] = useState('hh:mm:ss')
     const [numberOfProjects, setNumberofProjects] = useState(7)
     const [numberOfVoters, setNumberOfVoters] = useState(32)
+
+    const countDownInit = () => {
+        setInterval(() => {
+            const seconds =
+                userContext.userState?.sync.calcEpochRemainingTime() || 0
+
+            // 1 epoch = 300 seconds. It is configured in contracts/scripts/deploy.ts
+            const hours = Math.floor(seconds / 3600)
+            const minutes = Math.floor((seconds % 3600) / 60)
+            const remainingSeconds = seconds % 60
+
+            setVotingEnds(`
+                ${hours.toString().padStart(2, '0')}:
+                ${minutes.toString().padStart(2, '0')}:
+                ${remainingSeconds.toString().padStart(2, '0')}
+            `)
+            if (seconds > 0) {
+                setIsVotingTime(true)
+            }
+            if (numberOfVoters > 0) {
+                setIsResultTime(true)
+            }
+            // TODO: get the number of voters
+        }, 1000)
+    }
+
+    useEffect(() => {
+        if (!userContext) return
+
+        setNumberofProjects(data.projects.length - 1) // project -1 does not count
+        countDownInit()
+    }, [])
+
     return (
         <Container>
             <Title>{isVotingTime ? 'Projects' : 'Voting result'}</Title>
@@ -28,14 +64,15 @@ const TopDescription = () => {
             </Description>
             <Highlight>
                 {isVotingTime
-                    ? `Voting ends: hh:mm:ss`
+                    ? `Voting ends: ${votingEnds}`
                     : `Voting starts at: ${startMonth} ${startDay}, ${startHour}. Close at: ${endMonth} ${endDay}, ${endHour}.`}
             </Highlight>
             <BlockDescription>
                 {isVotingTime
                     ? 'Voting started. LFG'
-                    : isResultTime &&
-                      'You already voted. Let’s wait for results.'}
+                    : isResultTime
+                    ? 'You already voted. Let’s wait for results.'
+                    : 'Wait for voting to start.'}
             </BlockDescription>
         </Container>
     )

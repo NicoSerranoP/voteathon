@@ -1,19 +1,21 @@
 import { styled } from 'styled-components'
+import { Project } from '../../types/projects'
 import VoteSection from './VoteSection'
 
 type Props = {
     index: number
-    project: any
+    project: Project
 }
 
-const Row = ({ index }: Props) => {
+const Row = ({ index, project }: Props) => {
     return (
         <Container>
             <LeftContainer>
-                <h3>Project Name {index}</h3>
-                <p>Here goes the project description</p>
+                <h3>{`${index + 1}: ${project.name}`}</h3>
+                <p>{project.description}</p>
+                <BoldText>{project.deliverables}</BoldText>
             </LeftContainer>
-            <VoteSection />
+            <VoteSection projectId={project.id} />
         </Container>
     )
 }
@@ -32,6 +34,10 @@ const LeftContainer = styled.div`
     flex-direction: column;
     align-items: start;
     padding: 10px;
+`
+
+const BoldText = styled.h5`
+    font-weight: 500;
 `
 
 export default Row

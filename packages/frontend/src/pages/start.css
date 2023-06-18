@@ -1,3 +1,45 @@
+.title {
+    width: 32%;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+}
+
+.info {
+    width: 32%;
+    margin-top: 8em;
+    font-size: 1.1em;
+}
+
+.info > .list-title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.info > ol {
+    line-height: 2em;
+}
+
+.right-container {
+    float: right;
+    width: 400px;
+    position: relative;
+    right: 15%;
+    top: 10%;
+}
+
+.right-container > img {
+    width: 100%;
+}
+
+.right-container > .info-title {
+    margin-top: 2em;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1em;
+    color: white;
+}
+
 p {
     font-size: 14px;
     font-weight: 200;
