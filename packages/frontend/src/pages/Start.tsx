@@ -39,6 +39,7 @@ export default observer(() => {
             'Adding you to your project &  redirecting you to the voting page. This might take a while...'
         )
         const { projectID } = await userContext.signup(claimCode)
+        localStorage.setItem('projectID', `${projectID}`)
         if (projectID >= 0) {
             await userContext.joinProject(projectID)
         }

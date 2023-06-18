@@ -1,4 +1,3 @@
-import Voteathon from '../../contexts/Voteathon'
 import User from '../../contexts/User'
 import { useEffect, useState, useContext } from 'react'
 import { styled } from 'styled-components'
@@ -12,19 +11,22 @@ type Props = {
 }
 
 const VoteSection = ({ projectId, projectName }: Props) => {
-    const voteathonContext = useContext(Voteathon)
     const userContext = useContext(User)
     const [alreadyVoted, setAlreadyVoted] = useState(true)
     const [isResultTime, setIsResultTime] = useState(false)
     const [open, setOpen] = useState(false)
 
-    useEffect(() => {
+    const syncAlreadyVoted = () => {
         const alreadyVoted = localStorage.getItem('alreadyVoted')
         if (!alreadyVoted) {
             setAlreadyVoted(false)
         } else {
             setAlreadyVoted(true)
         }
+    }
+
+    useEffect(() => {
+        syncAlreadyVoted()
     }, [])
 
     useEffect(() => {
@@ -35,21 +37,9 @@ const VoteSection = ({ projectId, projectName }: Props) => {
         }
     }, [userContext])
 
-    useEffect(() => {
-        setTimeout(async () => {
-            console.log(voteathonContext.contract.scores)
-            //console.log(await voteathonContext.contract.scores(projectId))
-            // TODO: set each project votes
-        }, 2000)
-    }, [voteathonContext])
-
-    const handleVoteClick = () => {
-        setOpen(true)
-    }
-
-    return (
-        <>
-            {isResultTime ? (
+    // TODO re-add in
+    /**
+     *             {isResultTime ? (
                 <>
                     <Container style={{ color: '#151616', fontWeight: '800' }}>
                         # votes
@@ -57,33 +47,38 @@ const VoteSection = ({ projectId, projectName }: Props) => {
                 </>
             ) : (
                 <>
-                    {alreadyVoted ? (
-                        <Container
-                            style={{
-                                background: 'transparent',
-                                textAlign: 'center',
-                            }}
-                        >
-                            <img src={PathCheckIcon} width={'20px'} />
-                            <p style={{ lineHeight: '15px' }}>
-                                You already voted.
-                            </p>
-                        </Container>
-                    ) : (
-                        <Container>
-                            <img src={VoteathonIconBlack} width={'90px'} />
-                            <Button onClick={handleVoteClick}>
-                                Vote for me
-                            </Button>
-                            <VotingModal
-                                open={open}
-                                projectId={projectId}
-                                projectName={projectName}
-                                onDeselect={() => setOpen(false)}
-                            />
-                        </Container>
-                    )}
-                </>
+     */
+
+    const handleVoteClick = () => {
+        setOpen(true)
+    }
+
+    return (
+        <>
+            {alreadyVoted ? (
+                <Container
+                    style={{
+                        background: 'transparent',
+                        textAlign: 'center',
+                    }}
+                >
+                    <img src={PathCheckIcon} width={'20px'} />
+                    <p style={{ lineHeight: '15px' }}>You already voted.</p>
+                </Container>
+            ) : (
+                <Container>
+                    <img src={VoteathonIconBlack} width={'90px'} />
+                    <Button onClick={handleVoteClick}>Vote for me</Button>
+                    <VotingModal
+                        open={open}
+                        projectId={projectId}
+                        projectName={projectName}
+                        onDeselect={() => {
+                            setOpen(false)
+                            syncAlreadyVoted()
+                        }}
+                    />
+                </Container>
             )}
         </>
     )

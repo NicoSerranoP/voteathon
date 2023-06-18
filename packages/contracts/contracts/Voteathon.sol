@@ -104,14 +104,15 @@ contract Voteathon {
         Unirep.EpochKeySignals memory signals = unirep.decodeEpochKeySignals(
             publicSignals
         );
-        require(voted[signals.epochKey] < 2);
         require(signals.revealNonce == 1);
         require(signals.nonce == 1);
         if (emoji == Emoji.THUMBS_UP || emoji == Emoji.THUMBS_DOWN) {
+            require(voted[signals.epochKey] + 1 <= 2);
             voted[signals.epochKey] += 1;
             if (emoji == Emoji.THUMBS_UP) scores[projectID] += 1;
             else if (emoji == Emoji.THUMBS_DOWN) scores[projectID] -= 1;
         } else if (emoji == Emoji.HEART || emoji == Emoji.HEART_BROKEN) {
+            require(voted[signals.epochKey] + 2 <= 2);
             voted[signals.epochKey] += 2;
             if (emoji == Emoji.HEART) scores[projectID] += 2;
             else if (emoji == Emoji.HEART_BROKEN) scores[projectID] -= 2;
