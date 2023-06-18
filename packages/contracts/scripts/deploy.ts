@@ -20,7 +20,9 @@ export async function deployApp() {
     const verifier = await verifierF.deploy()
     await verifier.deployed()
     const nftF = await ethers.getContractFactory('VoteathonNFT')
-    const nft = await nftF.deploy()
+    const nft = await nftF.deploy(
+        'ipfs://QmNtYnjqeqWbRGC4R7fd9DCXWnQF87ufv7S2zGULtbSpLA'
+    )
     const App = await ethers.getContractFactory('Voteathon')
     const app = await App.deploy(
         unirep.address,
@@ -31,6 +33,7 @@ export async function deployApp() {
     )
 
     await app.deployed()
+    await nft.setVoteathonAddress(app.address).then((t) => t.wait())
 
     console.log(
         `Voteathon app with epoch length ${epochLength} is deployed to ${app.address}`

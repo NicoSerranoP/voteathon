@@ -30,6 +30,7 @@ contract Voteathon {
     mapping(uint256 => bool) claimed;
 
     int[] public scores;
+    uint[][] public projectData;
     uint public immutable numTeams;
     int public winnerScore;
     bool foundWinner = false;
@@ -56,6 +57,10 @@ contract Voteathon {
         // how many numTeams
         numTeams = _numTeams;
         scores = new int[](numTeams);
+        projectData = new uint[][](numTeams);
+        for (uint i; i < numTeams; i++) {
+            projectData[i] = new uint256[](4);
+        }
     }
 
     // sign up users in this app
@@ -79,6 +84,13 @@ contract Voteathon {
         require(signals.revealNonce == 1);
         require(signals.nonce == 0);
         participants[projectID].push(signals.epochKey);
+        // give user data if there is attestation before
+        uint48 epoch = unirep.attesterCurrentEpoch(uint160(address(this)));
+        require(epoch == 0);
+        uint256[] memory data = projectData[projectID];
+        for (uint256 i = 0; i < data.length; i++) {
+            unirep.attest(signals.epochKey, epoch, i, data[i]);
+        }
     }
 
     function vote(
@@ -104,6 +116,7 @@ contract Voteathon {
             if (emoji == Emoji.HEART) scores[projectID] += 2;
             else if (emoji == Emoji.HEART_BROKEN) scores[projectID] -= 2;
         }
+        projectData[projectID][uint(emoji)] += 1;
 
         uint[] memory members = participants[projectID];
         uint48 epoch = unirep.attesterCurrentEpoch(uint160(address(this)));
