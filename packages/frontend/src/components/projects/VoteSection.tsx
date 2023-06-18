@@ -5,9 +5,10 @@ import VotingModal from './VotingModal'
 
 type Props = {
     projectId: number
+    projectName: string
 }
 
-const VoteSection = ({ projectId }: Props) => {
+const VoteSection = ({ projectId, projectName }: Props) => {
     const [open, setOpen] = useState(false)
 
     const handleVoteClick = () => {
@@ -21,6 +22,7 @@ const VoteSection = ({ projectId }: Props) => {
             <VotingModal
                 open={open}
                 projectId={projectId}
+                projectName={projectName}
                 onDeselect={() => setOpen(false)}
             />
         </Container>
