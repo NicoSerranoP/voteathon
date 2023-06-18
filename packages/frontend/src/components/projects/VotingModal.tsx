@@ -15,19 +15,31 @@ const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
     const userContext = React.useContext(User)
 
     const [voting, setVoting] = useState(false);
+    const [voteComplete, setVoteComplete] = useState(false);
 
     const handleVoteClick = async () => {
         setVoting(true);
         try {
             const thumbsUpEmoji = 0
             await userContext.vote(projectId, thumbsUpEmoji)
-            localStorage.setItem('alreadyVoted', "true")
+            setVoteComplete(true)
+            localStorage.setItem('alreadyVoted', 'true')
         } catch (err) {
             console.error(err)
-        } finally {
-            setVoting(false)
         }
+        setVoting(false)
     };
+
+    const getVotingMessage = (): string => {
+        if (voting) {
+            return 'Submitting vote...'
+        }
+        if (voteComplete) {
+            return 'Vote Submtted!'
+        }
+
+        return 'Are you sure to vote on this project?'
+    }
 
     return (
         <StyledModal
@@ -49,12 +61,12 @@ const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
                 style={{ margin: 'auto' }}
             />
             <h2 style={{ marginBottom: '5px' }}>
-                {voting ? 'Submitting vote...' : 'Are you sure to vote on this project?'}
+                {getVotingMessage()}
             </h2>
             <p style={{ marginBottom: '15px' }}>
                 {projectName} - id: {projectId}
             </p>
-            <div
+            {!voteComplete && <div
                 style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -63,7 +75,7 @@ const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
             >
                 <Button disabled={voting} onClick={handleVoteClick}>Yes</Button>
                 <Button disabled={voting} onClick={onDeselect}>No</Button>
-            </div>
+            </div>}
         </StyledModal>
     )
 }

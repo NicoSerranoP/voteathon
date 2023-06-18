@@ -13,13 +13,17 @@ const VoteSection = ({ projectId, projectName }: Props) => {
     const [alreadyVoted, setAlreadyVoted] = useState(true)
     const [open, setOpen] = useState(false)
 
-    useEffect(() => {
+    const syncAlreadyVoted = () => {
         const alreadyVoted = localStorage.getItem('alreadyVoted')
         if (!alreadyVoted) {
             setAlreadyVoted(false)
         } else {
             setAlreadyVoted(true)
         }
+    }
+
+    useEffect(() => {
+        syncAlreadyVoted()
     }, [])
 
     const handleVoteClick = () => {
@@ -46,7 +50,10 @@ const VoteSection = ({ projectId, projectName }: Props) => {
                         open={open}
                         projectId={projectId}
                         projectName={projectName}
-                        onDeselect={() => setOpen(false)}
+                        onDeselect={() => {
+                            setOpen(false)
+                            syncAlreadyVoted()
+                        }}
                     />
                 </Container>
             )}
