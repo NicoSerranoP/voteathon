@@ -6,7 +6,7 @@ import { stringifyBigInts } from '@unirep/utils'
 import { schema, UserState } from '@unirep/core'
 import { SQLiteConnector } from 'anondb/node'
 import { DataProof, ProjectProof } from '@unirep-app/circuits'
-import { BigNumberish } from '@ethersproject/bignumber';
+import { BigNumberish } from '@ethersproject/bignumber'
 
 import defaultConfig from '@unirep/circuits/config'
 import { Identity } from '@semaphore-protocol/identity'
@@ -15,10 +15,10 @@ import { defaultProver as prover } from '@unirep-app/circuits/provers/defaultPro
 
 function padZeros(value: BigNumberish[], length: number): BigNumberish[] {
     while (value.length < length) {
-      value.push(0);
+        value.push(0)
     }
-    return value;
-  }
+    return value
+}
 
 async function genUserState(id, app) {
     // generate a user state
@@ -74,7 +74,9 @@ describe('Voteathon', function () {
         const verifierF = await ethers.getContractFactory('DataProofVerifier')
         const verifier = await verifierF.deploy()
         await verifier.deployed()
-        const verifierF1 = await ethers.getContractFactory('ProjectProofVerifier')
+        const verifierF1 = await ethers.getContractFactory(
+            'ProjectProofVerifier'
+        )
         const verifier1 = await verifierF1.deploy()
         await verifier1.deployed()
         const VoteathonF = await ethers.getContractFactory('Voteathon')
@@ -128,7 +130,7 @@ describe('Voteathon', function () {
                 revealNonce: true,
             })
             console.log('hacker', i, 'join project', projectID)
-        await voteathon
+            await voteathon
                 .joinProject(projectID, publicSignals, proof)
                 .then((t) => t.wait())
             userState.sync.stop()
@@ -140,19 +142,22 @@ describe('Voteathon', function () {
             const userState = await genUserState(voter[i], voteathon)
             const emoji = i % 4
             const projectID = i % numTeams
-            const count = await voteathon.counts(projectID);
-            const epoch_keys = new Array();
+            const count = await voteathon.counts(projectID)
+            const epoch_keys = new Array()
             for (let j = 0; j < count; j++) {
-                const epoch_key = await voteathon.participants(projectID,j);
-                epoch_keys.push(epoch_key);
+                const epoch_key = await voteathon.participants(projectID, j)
+                epoch_keys.push(epoch_key)
             }
-            const padded_epoch_keys = padZeros(epoch_keys, 10);
+            const padded_epoch_keys = padZeros(epoch_keys, 10)
 
             const nonce = 1
             const attesterId = voteathon.address
             const epoch = 0
             const tree = await userState.sync.genStateTree(epoch, attesterId)
-            const leafIndex = await userState.latestStateTreeLeafIndex(epoch, attesterId)
+            const leafIndex = await userState.latestStateTreeLeafIndex(
+                epoch,
+                attesterId
+            )
             const data = await userState.getData(epoch - 1, attesterId)
             const proof = tree.createProof(leafIndex)
 
@@ -172,12 +177,24 @@ describe('Voteathon', function () {
                 'projectProof',
                 circuitInputs
             )
-            const projectProof = new ProjectProof(p.publicSignals, p.proof, prover)
+            const projectProof = new ProjectProof(
+                p.publicSignals,
+                p.proof,
+                prover
+            )
             console.log('voter', i, 'vote project', projectID, 'emoji', emoji)
-            console.log('projectProof.publicSignals', projectProof.publicSignals)
+            console.log(
+                'projectProof.publicSignals',
+                projectProof.publicSignals
+            )
             await voteathon
-            .vote(projectID, emoji, projectProof.publicSignals, projectProof.proof)
-            .then((t) => t.wait())
+                .vote(
+                    projectID,
+                    emoji,
+                    projectProof.publicSignals,
+                    projectProof.proof
+                )
+                .then((t) => t.wait())
             userState.sync.stop()
         }
 
@@ -186,19 +203,22 @@ describe('Voteathon', function () {
             const emoji = (i + 2) % 4
             const projectID = (i + 2) % numTeams
 
-            const count = await voteathon.counts(projectID);
-            const epoch_keys = new Array();
+            const count = await voteathon.counts(projectID)
+            const epoch_keys = new Array()
             for (let j = 0; j < count; j++) {
-                const epoch_key = await voteathon.participants(projectID,j);
-                epoch_keys.push(epoch_key);
+                const epoch_key = await voteathon.participants(projectID, j)
+                epoch_keys.push(epoch_key)
             }
-            const padded_epoch_keys = padZeros(epoch_keys, 10);
+            const padded_epoch_keys = padZeros(epoch_keys, 10)
 
             const nonce = 1
             const attesterId = voteathon.address
             const epoch = 0
             const tree = await userState.sync.genStateTree(epoch, attesterId)
-            const leafIndex = await userState.latestStateTreeLeafIndex(epoch, attesterId)
+            const leafIndex = await userState.latestStateTreeLeafIndex(
+                epoch,
+                attesterId
+            )
             const data = await userState.getData(epoch - 1, attesterId)
             const proof = tree.createProof(leafIndex)
 
@@ -220,12 +240,21 @@ describe('Voteathon', function () {
                 'projectProof',
                 circuitInputs
             )
-            const voted = await voteathon.voted(p.publicSignals[0]);
+            const voted = await voteathon.voted(p.publicSignals[0])
             console.log('voted', voted)
-            const projectProof = new ProjectProof(p.publicSignals, p.proof, prover)
+            const projectProof = new ProjectProof(
+                p.publicSignals,
+                p.proof,
+                prover
+            )
 
             await voteathon
-            .vote(projectID, emoji, projectProof.publicSignals, projectProof.proof)
+                .vote(
+                    projectID,
+                    emoji,
+                    projectProof.publicSignals,
+                    projectProof.proof
+                )
                 .then((t) => t.wait())
             userState.sync.stop()
         }

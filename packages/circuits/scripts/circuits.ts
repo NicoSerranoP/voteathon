@@ -1,5 +1,10 @@
 import { CircuitConfig } from '@unirep/circuits'
-const { STATE_TREE_DEPTH, FIELD_COUNT, SUM_FIELD_COUNT, NUM_EPOCH_KEY_NONCE_PER_EPOCH } = CircuitConfig.default
+const {
+    STATE_TREE_DEPTH,
+    FIELD_COUNT,
+    SUM_FIELD_COUNT,
+    NUM_EPOCH_KEY_NONCE_PER_EPOCH,
+} = CircuitConfig.default
 
 export const ptauName = 'powersOfTau28_hez_final_18.ptau'
 export const MAX_COUNT = 10

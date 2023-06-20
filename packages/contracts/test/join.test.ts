@@ -12,11 +12,11 @@ import { stringifyBigInts } from '@unirep/utils'
 
 function padZeros(value: BigNumberish[], length: number): BigNumberish[] {
     while (value.length < length) {
-      value.push(0);
+        value.push(0)
     }
-    return value;
-  }
-  
+    return value
+}
+
 async function genUserState(id, app) {
     // generate a user state
     const db = await SQLiteConnector.create(schema, ':memory:')
@@ -69,7 +69,9 @@ describe('Join project', function () {
         const verifier = await verifierF.deploy()
         await verifier.deployed()
 
-        const verifierF1 = await ethers.getContractFactory('ProjectProofVerifier')
+        const verifierF1 = await ethers.getContractFactory(
+            'ProjectProofVerifier'
+        )
         const verifier1 = await verifierF1.deploy()
         await verifier1.deployed()
         const VoteathonF = await ethers.getContractFactory('Voteathon')
@@ -129,42 +131,50 @@ describe('Join project', function () {
         const userState = await genUserState(voter, voteathon)
         const epoch = 0
         const tree = await userState.sync.genStateTree(epoch, attesterId)
-        const leafIndex = await userState.latestStateTreeLeafIndex(epoch, attesterId)
+        const leafIndex = await userState.latestStateTreeLeafIndex(
+            epoch,
+            attesterId
+        )
         const proof = tree.createProof(leafIndex)
-        const epoch_keys = new Array();
-        const count = await voteathon.counts(projectID);
+        const epoch_keys = new Array()
+        const count = await voteathon.counts(projectID)
         for (let j = 0; j < count; j++) {
-            const epoch_key = await voteathon.participants(projectID,j);
-            epoch_keys.push(epoch_key);
+            const epoch_key = await voteathon.participants(projectID, j)
+            epoch_keys.push(epoch_key)
         }
-        const padded_epoch_keys = padZeros(epoch_keys, 10);
+        const padded_epoch_keys = padZeros(epoch_keys, 10)
 
         // generate
         // const { publicSignals, proof } = await userState.genEpochKeyProof({
         //     nonce: 1,
         //     revealNonce: true,
         // })
-        
+
         const circuitInputs = stringifyBigInts({
-                identity_secret: userState.id.secret,
-                data: userState.getData(),
-                sig_data: 0,
-                state_tree_elements: proof.siblings,
-                state_tree_indexes: proof.pathIndices,
-                epoch,
-                nonce: 1,
-                attester_id: attesterId,
-                reveal_nonce: 1,
-                project_epoch_keys: padded_epoch_keys,
-            })
-            const p = await prover.genProofAndPublicSignals(
-                'projectProof',
-                circuitInputs
-            )
-            const projectProof = new ProjectProof(p.publicSignals, p.proof, prover)
+            identity_secret: userState.id.secret,
+            data: userState.getData(),
+            sig_data: 0,
+            state_tree_elements: proof.siblings,
+            state_tree_indexes: proof.pathIndices,
+            epoch,
+            nonce: 1,
+            attester_id: attesterId,
+            reveal_nonce: 1,
+            project_epoch_keys: padded_epoch_keys,
+        })
+        const p = await prover.genProofAndPublicSignals(
+            'projectProof',
+            circuitInputs
+        )
+        const projectProof = new ProjectProof(p.publicSignals, p.proof, prover)
 
         await voteathon
-            .vote(projectID, emoji, projectProof.publicSignals, projectProof.proof)
+            .vote(
+                projectID,
+                emoji,
+                projectProof.publicSignals,
+                projectProof.proof
+            )
             .then((t) => t.wait())
         userState.sync.stop()
     })

@@ -10,8 +10,10 @@ export default (app: Express, _db: DB, synchronizer: Synchronizer) => {
             const { projectID, publicSignals, proof } = req.body
 
             const { hash } = await joinProject(synchronizer)(
-                projectID, publicSignals, proof
-            );
+                projectID,
+                publicSignals,
+                proof
+            )
 
             res.json({ hash })
         } catch (error) {

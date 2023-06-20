@@ -14,11 +14,11 @@ type Props = {
 const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
     const userContext = React.useContext(User)
 
-    const [voting, setVoting] = useState(false);
-    const [voteComplete, setVoteComplete] = useState(false);
+    const [voting, setVoting] = useState(false)
+    const [voteComplete, setVoteComplete] = useState(false)
 
     const handleVoteClick = async () => {
-        setVoting(true);
+        setVoting(true)
         try {
             const thumbsUpEmoji = 0
             await userContext.vote(projectId, thumbsUpEmoji)
@@ -28,7 +28,7 @@ const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
             console.error(err)
         }
         setVoting(false)
-    };
+    }
 
     const getVotingMessage = (): string => {
         if (voting) {
@@ -60,22 +60,26 @@ const VotingModal = ({ open, projectId, projectName, onDeselect }: Props) => {
                 width={'90px'}
                 style={{ margin: 'auto' }}
             />
-            <h2 style={{ marginBottom: '5px' }}>
-                {getVotingMessage()}
-            </h2>
+            <h2 style={{ marginBottom: '5px' }}>{getVotingMessage()}</h2>
             <p style={{ marginBottom: '15px' }}>
                 {projectName} - id: {projectId}
             </p>
-            {!voteComplete && <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '20px',
-                }}
-            >
-                <Button disabled={voting} onClick={handleVoteClick}>Yes</Button>
-                <Button disabled={voting} onClick={onDeselect}>No</Button>
-            </div>}
+            {!voteComplete && (
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '20px',
+                    }}
+                >
+                    <Button disabled={voting} onClick={handleVoteClick}>
+                        Yes
+                    </Button>
+                    <Button disabled={voting} onClick={onDeselect}>
+                        No
+                    </Button>
+                </div>
+            )}
         </StyledModal>
     )
 }

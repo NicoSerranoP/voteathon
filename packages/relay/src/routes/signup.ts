@@ -6,27 +6,32 @@ import { Synchronizer } from '@unirep/core'
 import { APP_ADDRESS } from '../config'
 import TransactionManager from '../singletons/TransactionManager'
 import UNIREP_APP from '@unirep-app/contracts/artifacts/contracts/Voteathon.sol/Voteathon.json'
-import ClaimCodeManager, {ClaimCodeStatus, ClaimCodeStatusEnum} from '../../../claimCodes/src/index';
-import fs from 'fs';
-import path from 'path';
+import ClaimCodeManager, {
+    ClaimCodeStatus,
+    ClaimCodeStatusEnum,
+} from '../../../claimCodes/src/index'
+import fs from 'fs'
+import path from 'path'
 
 const CLAIM_CODE_PATH = path.join(__dirname, '../../../../claimCodes.json')
 
-let claimCodes = undefined;
+let claimCodes = undefined
 
 try {
-    claimCodes = JSON.parse(fs.readFileSync(CLAIM_CODE_PATH, 'utf8'));
-  } catch (error) {
-    console.error('Error reading claimCodes.json:', error);
+    claimCodes = JSON.parse(fs.readFileSync(CLAIM_CODE_PATH, 'utf8'))
+} catch (error) {
+    console.error('Error reading claimCodes.json:', error)
 }
 
-const claimCodeManager = new ClaimCodeManager(claimCodes? claimCodes : undefined);
+const claimCodeManager = new ClaimCodeManager(
+    claimCodes ? claimCodes : undefined
+)
 
 export default (app: Express, db: DB, synchronizer: Synchronizer) => {
     app.post('/api/signup', async (req, res) => {
         try {
             const { publicSignals, proof, claimCode } = req.body
-            let projectID: number | undefined = undefined;
+            let projectID: number | undefined = undefined
             const signupProof = new SignupProof(
                 publicSignals,
                 proof,
@@ -36,15 +41,21 @@ export default (app: Express, db: DB, synchronizer: Synchronizer) => {
             const claimCodeStatus = await claimCodeManager.claimCode(claimCode)
 
             if (claimCodeStatus.status === ClaimCodeStatusEnum.ALREADY_USED) {
-                res.status(400).json({ error: 'CLAIM CODE USED, CONTACT ADMINS' })
+                res.status(400).json({
+                    error: 'CLAIM CODE USED, CONTACT ADMINS',
+                })
                 return
-            } else if (claimCodeStatus.status === ClaimCodeStatusEnum.NOT_FOUND) {
+            } else if (
+                claimCodeStatus.status === ClaimCodeStatusEnum.NOT_FOUND
+            ) {
                 res.status(400).json({ error: 'CLAIM CODE NOT FOUND' })
                 return
-            }
-            else if (claimCodeStatus.status === ClaimCodeStatusEnum.CLAIMED) {
-                projectID = claimCodeStatus.projectID;
-                fs.writeFileSync(CLAIM_CODE_PATH, JSON.stringify(claimCodeManager.getClaimCodeSets(), null, 4));
+            } else if (claimCodeStatus.status === ClaimCodeStatusEnum.CLAIMED) {
+                projectID = claimCodeStatus.projectID
+                fs.writeFileSync(
+                    CLAIM_CODE_PATH,
+                    JSON.stringify(claimCodeManager.getClaimCodeSets(), null, 4)
+                )
                 console.info('CLAIM CODE CLAIMED: ' + claimCode)
             } else {
                 res.status(400).json({ error: 'CLAIM CODE UNKNOWN STATUS' })

@@ -9,7 +9,7 @@ enum Emoji {
     THUMBS_UP,
     THUMBS_DOWN,
     HEART,
-    HEART_BROKEN
+    HEART_BROKEN,
 }
 
 type ReqInfo = {
@@ -184,7 +184,9 @@ export default observer(() => {
                                                     )
                                                         return
 
-                                                        throw new Error("TODO Does vote need to happen here?");
+                                                    throw new Error(
+                                                        'TODO Does vote need to happen here?'
+                                                    )
                                                 }}
                                             />
                                         </div>
@@ -233,12 +235,9 @@ export default observer(() => {
                                 ) {
                                     throw new Error('Needs transition')
                                 }
-                                await userContext.vote(
-                                    projectID,
-                                    emoji,
-                                )
-                                setProjectID(0);
-                                setEmoji(0);
+                                await userContext.vote(projectID, emoji)
+                                setProjectID(0)
+                                setEmoji(0)
                             }}
                         >
                             Attest
