@@ -44,6 +44,7 @@ export async function deployApp() {
     console.log(
         `Voteathon app with epoch length ${epochLength} is deployed to ${app.address}`
     )
+    console.log(`Voteathon NFT is deployed to ${nft.address}`)
 
     const config = `export default {
     UNIREP_ADDRESS: '${unirep.address}',

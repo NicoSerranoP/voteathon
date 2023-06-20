@@ -45,7 +45,6 @@ const genCircuitInput = (config: {
     )
     stateTree.insert(hashedLeaf)
     const stateTreeProof = stateTree.createProof(0) // if there is only one GST leaf, the index is 0
-        console.log(stateTree.root)
     const circuitInputs = {
         state_tree_indexes: stateTreeProof.pathIndices,
         state_tree_elements: stateTreeProof.siblings,

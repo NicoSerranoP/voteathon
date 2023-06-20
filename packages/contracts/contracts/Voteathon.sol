@@ -90,18 +90,18 @@ contract Voteathon {
         uint256[] memory publicSignals,
         uint256[8] memory proof
     ) public {
-        require(projectID < numTeams);
+        require(projectID < numTeams, 'Voteathon: invalid project iD');
         unirep.verifyEpochKeyProof(publicSignals, proof);
         Unirep.EpochKeySignals memory signals = unirep.decodeEpochKeySignals(
             publicSignals
         );
-        require(signals.revealNonce == 1);
-        require(signals.nonce == 0);
-        require(counts[projectID] < 10);
+        require(signals.revealNonce == 1, 'Voteathon: should reveal nonce');
+        require(signals.nonce == 0, 'Voteathon: invalid nonce');
+        require(counts[projectID] < 10, 'Voteathon: maximum participants in a project');
         participants[projectID].push(signals.epochKey);
         // give user data if there is attestation before
         uint48 epoch = unirep.attesterCurrentEpoch(uint160(address(this)));
-        require(epoch == 0);
+        require(epoch == 0, 'Voteathon: not join epoch');
         uint256[] memory data = projectData[projectID];
         for (uint256 i = 0; i < data.length; i++) {
             unirep.attest(signals.epochKey, epoch, i, data[i]);
@@ -134,12 +134,12 @@ contract Voteathon {
         verifyProjectProof(publicSignals, proof);
 
         if (emoji == Emoji.THUMBS_UP || emoji == Emoji.THUMBS_DOWN) {
-            require(voted[signals.epochKey] + 1 <= 2);
+            require(voted[signals.epochKey] + 1 <= 2, 'Voteathon: invalid vote value');
             voted[signals.epochKey] += 1;
             if (emoji == Emoji.THUMBS_UP) scores[projectID] += 1;
             else if (emoji == Emoji.THUMBS_DOWN) scores[projectID] -= 1;
         } else if (emoji == Emoji.HEART || emoji == Emoji.HEART_BROKEN) {
-            require(voted[signals.epochKey] + 2 <= 2);
+            require(voted[signals.epochKey] + 2 <= 2, 'Voteathon: invalid vote value');
             voted[signals.epochKey] += 2;
             if (emoji == Emoji.HEART) scores[projectID] += 2;
             else if (emoji == Emoji.HEART_BROKEN) scores[projectID] -= 2;
@@ -148,7 +148,7 @@ contract Voteathon {
         
         uint[] memory members = participants[projectID];
         uint48 epoch = unirep.attesterCurrentEpoch(uint160(address(this)));
-        require(epoch == 0);
+        require(epoch == 0, 'Voteathon: not voting epoch');
         for (uint256 i = 0; i < members.length; i++) {
             unirep.attest(members[i], epoch, uint(emoji), 1);
         }

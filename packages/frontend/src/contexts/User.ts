@@ -7,7 +7,7 @@ import { DataProof, ProjectProof } from '@unirep-app/circuits'
 import { SERVER } from '../config'
 import prover from './prover'
 import { BigNumberish, ethers } from 'ethers'
-import UnirepApp from '@unirep-app/contracts/abi/UnirepApp.json'
+import Voteathon from '@unirep-app/contracts/abi/Voteathon.json'
 
 class User {
     currentEpoch: number = 0
@@ -18,6 +18,7 @@ class User {
     userState?: UserState
     provider: any
     projectID: number | undefined = undefined
+    appAddress: string = ''
 
     constructor() {
         makeAutoObservable(this)
@@ -39,6 +40,7 @@ class User {
             ? new ethers.providers.JsonRpcProvider(ETH_PROVIDER_URL)
             : new ethers.providers.WebSocketProvider(ETH_PROVIDER_URL)
         this.provider = provider
+        this.appAddress = APP_ADDRESS
 
         const userState = new UserState(
             {
@@ -95,12 +97,14 @@ class User {
                     publicSignals: signupProof.publicSignals,
                     proof: signupProof.proof,
                     claimCode: claimCode,
-                }
-            )),
+                })
+            ),
         })
-        const data = await res.json();
+        const data = await res.json()
         if (res.status >= 400) {
-            throw new Error(`HTTP ${res.status}: ${JSON.stringify(data, null, 4)}`);
+            throw new Error(
+                `HTTP ${res.status}: ${JSON.stringify(data, null, 4)}`
+            )
         }
 
         await this.provider.waitForTransaction(data.hash)
@@ -108,12 +112,10 @@ class User {
         this.hasSignedUp = await this.userState.hasSignedUp()
         this.latestTransitionedEpoch = this.userState.sync.calcCurrentEpoch()
 
-        return { projectID: data.projectID };
+        return { projectID: data.projectID }
     }
 
-    async joinProject(
-        projectID: number,
-    ) {
+    async joinProject(projectID: number) {
         if (!this.userState) throw new Error('user state not initialized')
 
         const epochKeyProof = await this.userState.genEpochKeyProof({
@@ -139,37 +141,37 @@ class User {
         this.projectID = projectID
     }
 
-    
-    async vote(
-        projectID: number,
-        emoji: number,
-    ) {
+    async vote(projectID: number, emoji: number) {
         if (!this.userState) throw new Error('user state not initialized')
-        if (projectID === this.projectID) throw new Error('you cannot vote your project')
+        if (projectID === this.projectID)
+            throw new Error('you cannot vote your project')
 
         // const epochKeyProof = await this.userState.genEpochKeyProof({
         //     nonce: 1,
         //     revealNonce: true,
         // })
         const voteathon = new ethers.Contract(
-            this.userState.sync.attesterId.toString(),
-            UnirepApp,
+            this.appAddress,
+            Voteathon,
             this.provider
         )
 
-        const count = 10;
-        const epoch_keys = new Array();
+        const count = (await voteathon.counts(projectID)).toNumber()
+        const epoch_keys = new Array()
         for (let j = 0; j < count; j++) {
-            const epoch_key = await voteathon.participants(projectID,j);
-            epoch_keys.push(epoch_key);
+            const epoch_key = await voteathon.participants(projectID, j)
+            epoch_keys.push(epoch_key)
         }
-        const padded_epoch_keys = padZeros(epoch_keys, 10);
+        const padded_epoch_keys = padZeros(epoch_keys, 10)
 
         const nonce = 1
         const attesterId = voteathon.address
         const epoch = 0
         const tree = await this.userState.sync.genStateTree(epoch, attesterId)
-        const leafIndex = await this.userState.latestStateTreeLeafIndex(epoch, attesterId)
+        const leafIndex = await this.userState.latestStateTreeLeafIndex(
+            epoch,
+            attesterId
+        )
         const data = await this.userState.getData(epoch - 1, attesterId)
         const proof = tree.createProof(leafIndex)
 
@@ -180,7 +182,7 @@ class User {
             state_tree_elements: proof.siblings,
             state_tree_indexes: proof.pathIndices,
             epoch,
-            nonce: 1,
+            nonce,
             attester_id: attesterId,
             reveal_nonce: 1,
             project_epoch_keys: padded_epoch_keys,
@@ -190,7 +192,7 @@ class User {
             circuitInputs
         )
         const projectProof = new ProjectProof(p.publicSignals, p.proof, prover)
-          
+
         const data1 = await fetch(`${SERVER}/api/vote`, {
             method: 'POST',
             headers: {
@@ -231,7 +233,11 @@ class User {
             'dataProof',
             circuitInputs
         )
-        const { publicSignals, proof } = new DataProof(p.publicSignals, p.proof, prover)
+        const { publicSignals, proof } = new DataProof(
+            p.publicSignals,
+            p.proof,
+            prover
+        )
         const data = await fetch(`${SERVER}/api/prize/claim`, {
             method: 'POST',
             headers: {
@@ -312,7 +318,7 @@ export default createContext(new User())
 
 function padZeros(value: BigNumberish[], length: number): BigNumberish[] {
     while (value.length < length) {
-      value.push(0);
+        value.push(0)
     }
-    return value;
-  }
+    return value
+}
