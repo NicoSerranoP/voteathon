@@ -21,10 +21,10 @@ Build your own and get started.
 
 # Start the app locally
 
-### 1 Build the files
+### 1 Install and build the files
 
 ```shell
-yarn build
+yarn install && yarn build
 ```
 
 ### 2 Start a node
@@ -54,6 +54,25 @@ in new terminal window, from root:
 ```shell
 yarn frontend start
 ```
+
+### 6 choose a claim code to join :)
+
+Choose one of the claim code in [claimCodes.json](./claimCodes.json)
+
+```json
+{
+    "0": {
+        "claimCodes": [
+            {
+                "code": "curious-fall",
+                "used": false
+            },
+    ...
+    }
+}
+```
+
+e.g. `curious-fall` for project 0.
 
 ## User flow in a nutshell
 
